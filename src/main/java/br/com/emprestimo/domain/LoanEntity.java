@@ -2,7 +2,7 @@ package br.com.emprestimo.domain;
 
 import br.com.emprestimo.enums.LoanTimeFrame;
 import lombok.Data;
-import org.apache.catalina.User;
+
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;

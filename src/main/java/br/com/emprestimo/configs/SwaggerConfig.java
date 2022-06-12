@@ -1,6 +1,5 @@
 package br.com.emprestimo.configs;
 
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -14,12 +13,16 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@EnableSwagger2
-@AllArgsConstructor
+
 @Configuration
-public class SwaggerConfig {
+@EnableSwagger2
+public class SwaggerConfig{
 
     private final Environment env;
+
+    public SwaggerConfig(Environment env) {
+        this.env = env;
+    }
 
     @Bean
     public Docket api() {
