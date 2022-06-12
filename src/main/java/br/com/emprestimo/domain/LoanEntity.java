@@ -39,7 +39,7 @@ public class LoanEntity {
     @Column(name = "loan_date_due")
     private LocalDate loanDateDue;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
