@@ -26,5 +26,16 @@ public class UserService {
         userRepository.save(userToSave);
         log.info("User saved -> {}",userToSave.getName());
     }
+    @Transactional
+    public void updateUserStatus(String userCpf, String sBoolean) {
+       var user = userRepository.findUserByCpf(userCpf);
+       if (user.isPresent()) {
+           user.get().setIsUserActive(Boolean.valueOf(sBoolean));
+           var userUpdated = userRepository.save(user.get());
+           log.info("status updated -> {} {}",userUpdated.getCpf(),userUpdated.getIsUserActive());
+       } else {
+           throw new RuntimeException("user not found");
+       }
+    }
 
 }

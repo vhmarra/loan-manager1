@@ -2,15 +2,14 @@ package br.com.emprestimo.controllers;
 
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.services.UserService;
+import br.com.emprestimo.utils.CpfValidation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-@AllArgsConstructor
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("api/v1/user")
+@AllArgsConstructor
 public class UserController {
 
     private final UserService service;
@@ -18,6 +17,14 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> userSignUp(@RequestBody UserSignUpRequest request) {
         service.signUpUser(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping
+    public ResponseEntity<?> userUpdate(@RequestHeader(name = "user-cpf") String userCpf,
+                                        @RequestHeader(name = "boolean-value") String bolValue) {
+        CpfValidation.validateCpf(userCpf);
+        service.updateUserStatus(userCpf,bolValue);
         return ResponseEntity.ok().build();
     }
 

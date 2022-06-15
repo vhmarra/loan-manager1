@@ -2,6 +2,7 @@ package br.com.emprestimo.domain;
 
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "user_tb")
 @Data
+@NoArgsConstructor
 public class UserEntity {
 
     @Id
