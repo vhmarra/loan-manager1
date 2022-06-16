@@ -1,19 +1,24 @@
 package br.com.emprestimo.domain;
 
+import br.com.emprestimo.dtos.LoanRequest;
 import br.com.emprestimo.enums.LoanTimeFrame;
 import lombok.Data;
 
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Table(name = "LOAN_ENTITY")
+@NoArgsConstructor
 @Data
 public class LoanEntity {
 
@@ -43,4 +48,18 @@ public class LoanEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    public LoanEntity(LoanRequest request) {
+        this.loanValue = request.getLoanValue();
+        this.loanDateSigned = LocalDate.parse(request.getLoanDateSigned(), DateTimeFormatter.ISO_LOCAL_DATE);
+        this.loanDateDue = LocalDate.parse(request.getLoanDateDue(), DateTimeFormatter.ISO_LOCAL_DATE);
+        this.loanTimeFrame = validateTimeFrame(LocalDate.parse(request.getLoanDateSigned(), DateTimeFormatter.ISO_LOCAL_DATE)
+                ,LocalDate.parse(request.getLoanDateDue(), DateTimeFormatter.ISO_LOCAL_DATE));
+        this.isApproved = Boolean.FALSE;
+
+    }
+
+    private LoanTimeFrame validateTimeFrame(LocalDate signed, LocalDate due) {
+        if (signed == due) return LoanTimeFrame.D_ZERO;
+        else return LoanTimeFrame.D_THIRTY;
+    }
 }
