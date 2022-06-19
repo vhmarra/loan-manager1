@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +24,16 @@ public class LoanService {
             var loan = new LoanEntity(request);
             loan.setUser(user.get());
             repository.save(loan);
+        }
+    }
+    @Transactional
+    public void updateLoanStatus(UUID loanId, String loanStatus) {
+        var loan = repository.findById(loanId);
+        if (loan.isPresent()) {
+            loan.get().setIsApproved(Boolean.valueOf(loanStatus));
+            repository.save(loan.get());
+        } else {
+            throw new UnsupportedOperationException("loan not found");
         }
     }
 
