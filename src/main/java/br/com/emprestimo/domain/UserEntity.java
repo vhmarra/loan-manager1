@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 @Entity
@@ -33,13 +35,18 @@ public class UserEntity {
     @Column(name = "is_user_active")
     private Boolean isUserActive;
 
+    @Column(name = "serase_score")
+    @Min(value = 0)
+    @Max(value = 1000)
+    private int serasaScore;
+
     public UserEntity(UserSignUpRequest request) {
         this.cpf = request.getCpf();
         this.email = request.getEmail();
         this.name = request.getName();
         this.dateSigned = LocalDateTime.now();
-        this.isUserActive = Boolean.TRUE;
+        this.isUserActive = Boolean.FALSE; //All users must me activated before request loans
+        this.setSerasaScore(request.getSerasaScore());
     }
-
 
 }
