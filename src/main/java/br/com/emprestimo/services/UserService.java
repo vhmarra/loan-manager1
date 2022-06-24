@@ -25,7 +25,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final LoanRepository loanRepository;
 
-    @Transactional(rollbackOn = UnsupportedOperationException.class)
+    @Transactional
     public void signUpUser(UserSignUpRequest request) {
         validateCpf(request.getCpf());
         var userToSave = new UserEntity(request);
