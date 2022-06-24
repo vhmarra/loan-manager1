@@ -53,9 +53,4 @@ public class UserSignUpTest {
         Assertions.assertNotEquals(Optional.empty(),userSaved);
         Assertions.assertEquals(user1.getCpf(),userSaved.get().getCpf());
     }
-
-
-
-
-
 }
