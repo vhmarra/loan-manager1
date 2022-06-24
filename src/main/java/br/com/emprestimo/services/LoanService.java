@@ -20,10 +20,12 @@ public class LoanService {
     @Transactional
     public void requestLoan(LoanRequest request) {
         var user = userRepository.findUserByCpf(request.getUserCpf());
-        if (user.isPresent() && userHasLassThen5RequestedLoans(user.get().getId())) {
+        if (user.isPresent() && userHasLassThen5RequestedLoans(user.get().getId()) && user.get().getIsUserActive()) {
             var loan = new LoanEntity(request);
             loan.setUser(user.get());
             repository.save(loan);
+        } else {
+            throw new UnsupportedOperationException("error while save loan");
         }
     }
     @Transactional
