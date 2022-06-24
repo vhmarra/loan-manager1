@@ -51,7 +51,7 @@ public class UserSignUpTest {
 
         var userSaved = repository.findUserByCpf(request.getCpf());
         Assertions.assertNotEquals(Optional.empty(),userSaved);
-        Assertions.assertEquals(USER_TEST_CPF,userSaved.get().getCpf());
+        Assertions.assertEquals(user1.getCpf(),userSaved.get().getCpf());
     }
 
 }
