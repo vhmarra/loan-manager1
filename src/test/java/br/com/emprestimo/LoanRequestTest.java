@@ -20,14 +20,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 public class LoanRequestTest {
 
-    private static String USER_TEST_WRONG_CPF = "1998";
-    private static String USER_TEST_CPF = "78142440644";
-    private static String USER_TEST_EMAIL = "email@email.com";
-    private static String USER_TEST_NAME = "Nome teste";
+    private static final String USER_TEST_WRONG_CPF = "1998";
+    private static final String USER_TEST_CPF = "78142440644";
+    private static final String USER_TEST_EMAIL = "email@email.com";
+    private static final String USER_TEST_NAME = "Nome teste";
 
-    private static LocalDate TODAY = LocalDate.now();
+    private static final LocalDate TODAY = LocalDate.now();
 
-    private static LocalDate TODAY_PLUS_30 = TODAY.plusDays(30L);
+    private static final LocalDate TODAY_PLUS_30 = TODAY.plusDays(30L);
 
     @Autowired
     private LoanService service;
