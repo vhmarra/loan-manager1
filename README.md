@@ -1,2 +1,3 @@
 -To initiate the docker image for the database and kafka(will be implemented in a future commit)
+- docker volume create db_volume
 - docker-compose up

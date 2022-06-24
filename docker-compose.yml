@@ -9,7 +9,10 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: emprestimo_db
     volumes:
-      - ./db-data/:/var/lib/postgresql/data/
+      - db_volume:/var/lib/postgresql/data
+volumes:
+  db_volume:
+    external: true
 #  zookeeper:
 #    image: wurstmeister/zookeeper
 #    ports:
