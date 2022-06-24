@@ -20,7 +20,7 @@ public class LoanService {
     @Transactional
     public void requestLoan(LoanRequest request) {
         var user = userRepository.findUserByCpf(request.getUserCpf());
-        if (user.isPresent()) {
+        if (user.isPresent() && userHasLassThen5RequestedLoans(user.get().getId())) {
             var loan = new LoanEntity(request);
             loan.setUser(user.get());
             repository.save(loan);
@@ -35,6 +35,10 @@ public class LoanService {
         } else {
             throw new UnsupportedOperationException("loan not found or user is not activated");
         }
+    }
+
+    private boolean userHasLassThen5RequestedLoans(Long userId) {
+       return 5 <= repository.findNotApprovedFromUser(userId);
     }
 
 }

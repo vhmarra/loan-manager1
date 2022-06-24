@@ -43,6 +43,9 @@ public class LoanEntity {
     @Column(name = "loan_date_due")
     private LocalDate loanDateDue;
 
+    @Column(name = "is_payed")
+    private Boolean isPayed;
+
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "user_id")
     private UserEntity user;
@@ -54,7 +57,7 @@ public class LoanEntity {
         this.loanTimeFrame = validateTimeFrame(LocalDate.parse(request.getLoanDateSigned(), DateTimeFormatter.ISO_LOCAL_DATE)
                 ,LocalDate.parse(request.getLoanDateDue(), DateTimeFormatter.ISO_LOCAL_DATE));
         this.isApproved = Boolean.FALSE;
-
+        this.isPayed = Boolean.FALSE;
     }
 
     private LoanTimeFrame validateTimeFrame(LocalDate signed, LocalDate due) {
