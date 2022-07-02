@@ -12,6 +12,4 @@ import java.util.UUID;
 public interface LoanRepository extends JpaRepository<LoanEntity, UUID> {
 
     List<LoanEntity> findAllByUserId(Long userId);
-    @Query(value = "SELECT COUNT(1) FROM loan_entity le WHERE le.user_id = :userId and le.approved = false",nativeQuery = true)
-    int findNotApprovedFromUser(Long userId);
 }

@@ -1,5 +1,6 @@
 package br.com.emprestimo.services;
 
+import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.LoanResponse;
 import br.com.emprestimo.dtos.UserResponse;
@@ -28,18 +29,20 @@ public class UserService {
         validateCpf(request.getCpf());
         var userToSave = new UserEntity(request);
         userRepository.save(userToSave);
-        log.info("User saved -> {}",userToSave.getName());
+        log.info("User saved -> {}", userToSave.getName());
+
     }
+
     @Transactional
     public void updateUserStatus(String userCpf, String sBoolean) {
-       var user = userRepository.findUserByCpf(userCpf);
-       if (user.isPresent()) {
-           user.get().setIsUserActive(Boolean.valueOf(sBoolean));
-           var userUpdated = userRepository.save(user.get());
-           log.info("status updated -> {} {}",userUpdated.getCpf(),userUpdated.getIsUserActive());
-       } else {
-           throw new RuntimeException("user not found");
-       }
+        var user = userRepository.findUserByCpf(userCpf);
+        if (user.isPresent()) {
+            user.get().setIsUserActive(Boolean.valueOf(sBoolean));
+            var userUpdated = userRepository.save(user.get());
+            log.info("status updated -> {} {}", userUpdated.getCpf(), userUpdated.getIsUserActive());
+        } else {
+            throw new RuntimeException("user not found");
+        }
     }
 
     public UserResponse getUserData(String userCpf) {
@@ -55,6 +58,6 @@ public class UserService {
             userResponse.setLoanResponses(loansResponse);
             return userResponse;
         }
-       return new UserResponse();
+        return new UserResponse();
     }
 }
