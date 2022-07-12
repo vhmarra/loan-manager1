@@ -39,4 +39,14 @@ public class LoanService {
         }
     }
 
+    public void payLoan(UUID loanId) {
+        var loan = repository.findById(loanId);
+        if (loan.isPresent() && loan.get().getIsApproved() && loan.get().getUser().getIsUserActive()) {
+            loan.get().setIsPayed(Boolean.TRUE);
+            repository.save(loan.get());
+        } else {
+            throw new UnsupportedOperationException("error to pay loan");
+        }
+    }
+
 }

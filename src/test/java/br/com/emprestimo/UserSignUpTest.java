@@ -1,5 +1,6 @@
 package br.com.emprestimo;
 
+import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.repositories.UserRepository;
@@ -37,7 +38,7 @@ public class UserSignUpTest {
         request.setName(USER_TEST_NAME);
         var user1 = new UserEntity(request);
 
-       assertThrows(UnsupportedOperationException.class, () -> CpfValidation.validateCpf(user1.getCpf()));
+       assertThrows(InvalidStateException.class, () -> CpfValidation.validateCpf(user1.getCpf()));
     }
 
     @Test
