@@ -5,6 +5,7 @@ import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.LoanResponse;
 import br.com.emprestimo.dtos.UserResponse;
 import br.com.emprestimo.dtos.UserSignUpRequest;
+import br.com.emprestimo.exception.UserNotFoundException;
 import br.com.emprestimo.repositories.LoanRepository;
 import br.com.emprestimo.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -41,7 +42,7 @@ public class UserService {
             var userUpdated = userRepository.save(user.get());
             log.info("status updated -> {} {}", userUpdated.getCpf(), userUpdated.getIsUserActive());
         } else {
-            throw new RuntimeException("user not found");
+            throw new UserNotFoundException("user not found");
         }
     }
 

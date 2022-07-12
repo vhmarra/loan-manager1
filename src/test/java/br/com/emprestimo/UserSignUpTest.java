@@ -3,6 +3,7 @@ package br.com.emprestimo;
 import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.UserSignUpRequest;
+import br.com.emprestimo.exception.UserNotFoundException;
 import br.com.emprestimo.repositories.UserRepository;
 import br.com.emprestimo.services.UserService;
 import br.com.emprestimo.utils.CpfValidation;
@@ -53,5 +54,18 @@ public class UserSignUpTest {
         var userSaved = repository.findUserByCpf(request.getCpf());
         Assertions.assertNotEquals(Optional.empty(),userSaved);
         Assertions.assertEquals(user1.getCpf(),userSaved.get().getCpf());
+    }
+
+    @Test
+    void should_thrown_exception_when_update_user_not_found() {
+        var request = new UserSignUpRequest();
+        request.setCpf(USER_TEST_CPF);
+        request.setEmail(USER_TEST_EMAIL);
+        request.setName(USER_TEST_NAME);
+        var user1 = new UserEntity(request);
+        service.signUpUser(request);
+
+        assertThrows(UserNotFoundException.class, () -> service.updateUserStatus(USER_TEST_WRONG_CPF,"TRUE"));
+
     }
 }
