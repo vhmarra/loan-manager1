@@ -20,4 +20,9 @@ public class SpringExceptionHandler extends ResponseEntityExceptionHandler {
     ResponseEntity<Object> UserNotFoundHandler(RuntimeException rtex, WebRequest request) {
         return handleExceptionInternal(rtex, rtex.getMessage(), new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, request);
     }
+
+    @ExceptionHandler(value = UserAlreadyHasUnpayLoansException.class)
+    ResponseEntity<Object> UserAlreadyHasUnpayLoansExceptionHandler(RuntimeException rtex, WebRequest request) {
+        return handleExceptionInternal(rtex, rtex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
 }

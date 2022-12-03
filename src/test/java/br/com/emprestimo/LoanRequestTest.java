@@ -1,8 +1,10 @@
 package br.com.emprestimo;
 
+import br.com.emprestimo.domain.LoanEntity;
 import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.LoanRequest;
 import br.com.emprestimo.dtos.UserSignUpRequest;
+import br.com.emprestimo.exception.UserAlreadyHasUnpayLoansException;
 import br.com.emprestimo.repositories.LoanRepository;
 import br.com.emprestimo.repositories.UserRepository;
 import br.com.emprestimo.services.LoanService;
@@ -50,7 +52,19 @@ public class LoanRequestTest {
         assertThrows(UnsupportedOperationException.class, () -> service.requestLoan(loanRequest));
     }
 
+    @Test
+    void should_not_save_loan_when_user_already_have_loans(){
+        var request = new UserSignUpRequest();
+        request.setCpf(USER_TEST_CPF);
+        request.setEmail(USER_TEST_EMAIL);
+        request.setName(USER_TEST_NAME);
+        var savedUser = saveUser(request,Boolean.TRUE);
+        var loanRequestOne = buildLoanRequest(BigDecimal.valueOf(3000L),TODAY,TODAY_PLUS_30,savedUser.getCpf());
+        var loanRequestTwo = buildLoanRequest(BigDecimal.valueOf(3000L),TODAY,TODAY_PLUS_30,savedUser.getCpf());
+        repository.save(buildLoanEntity(loanRequestOne,savedUser));
 
+        assertThrows(UserAlreadyHasUnpayLoansException.class, () -> service.requestLoan(loanRequestTwo));
+    }
     private UserEntity saveUser(UserSignUpRequest user, Boolean userStatus) {
         var request = new UserSignUpRequest();
         request.setCpf(user.getCpf());
@@ -64,6 +78,12 @@ public class LoanRequestTest {
     private LoanRequest buildLoanRequest(BigDecimal loanValue, LocalDate loanDateSigned, LocalDate loanDateDue,
                                          String userCpf) {
         return new LoanRequest(loanValue,loanDateSigned.toString(),loanDateDue.toString(),userCpf);
+    }
+
+    private LoanEntity buildLoanEntity(LoanRequest request, UserEntity user) {
+        var loanEntity = new LoanEntity(request);
+        loanEntity.setUser(user);
+        return loanEntity;
     }
 
 }

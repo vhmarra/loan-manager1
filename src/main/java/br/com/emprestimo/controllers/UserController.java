@@ -28,7 +28,6 @@ public class UserController {
     @PatchMapping
     public ResponseEntity<?> userUpdate(@RequestHeader(name = "user-cpf") String userCpf,
                                         @RequestHeader(name = "boolean-value") String bolValue) {
-        CpfValidation.validateCpf(userCpf);
         service.updateUserStatus(userCpf,bolValue);
         return ResponseEntity.ok().build();
     }

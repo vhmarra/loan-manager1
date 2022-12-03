@@ -6,8 +6,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.kafka.annotation.EnableKafka;
 
 @SpringBootApplication
-@EnableJpaRepositories
-@EnableKafka()
+@EnableKafka
 public class EmprestimoApplication {
 
 	public static void main(String[] args) {
