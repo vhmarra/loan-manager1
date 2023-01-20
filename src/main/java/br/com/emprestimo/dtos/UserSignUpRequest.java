@@ -19,6 +19,9 @@ public class UserSignUpRequest {
     @Email(message = "Email out of format eg: email@email.com")
     private String email;
 
+    @JsonProperty(value = "user_pwd")
+    private String password;
+
     @JsonProperty(value = "user_name")
     private String name;
 
@@ -32,6 +35,7 @@ public class UserSignUpRequest {
         final StringBuffer sb = new StringBuffer("UserSignUpRequest{");
         sb.append("cpf='").append(cpf).append('\'');
         sb.append(", email='").append(email).append('\'');
+        sb.append(", password='").append(password).append('\'');
         sb.append(", name='").append(name).append('\'');
         sb.append(", serasaScore=").append(serasaScore);
         sb.append('}');
@@ -64,6 +68,9 @@ public class UserSignUpRequest {
             }
             if (k.contains("serasaScore")) {
                 usr.setSerasaScore(Integer.parseInt(v));
+            }
+            if (k.contains("password")) {
+                usr.setPassword(v);
             }
         });
         return usr;

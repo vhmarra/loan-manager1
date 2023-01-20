@@ -6,6 +6,7 @@ import br.com.emprestimo.exception.UserAlreadyHasUnpayLoansException;
 import br.com.emprestimo.repositories.LoanRepository;
 import br.com.emprestimo.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class LoanService {
 
     private final LoanRepository repository;
@@ -28,7 +30,9 @@ public class LoanService {
         if (user.isPresent() && user.get().getIsUserActive()) {
             var loan = new LoanEntity(request);
             loan.setUser(user.get());
+            log.info("Saving loan {}",loan.getLoanId());
             repository.save(loan);
+            log.info("Loan saved {}",loan.getLoanId());
         } else {
             throw new UnsupportedOperationException("error while save loan");
         }

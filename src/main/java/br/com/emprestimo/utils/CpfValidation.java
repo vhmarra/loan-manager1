@@ -1,6 +1,5 @@
 package br.com.emprestimo.utils;
 
-import br.com.caelum.stella.ValidationMessage;
 import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.emprestimo.exception.InvalidCPFException;
