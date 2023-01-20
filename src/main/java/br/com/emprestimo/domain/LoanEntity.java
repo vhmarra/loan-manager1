@@ -16,7 +16,7 @@ import java.util.UUID;
 import static javax.persistence.EnumType.STRING;
 
 @Entity
-@Table(name = "LOAN_ENTITY")
+@Table(name = "LOAN_TB")
 @NoArgsConstructor
 @Data
 public class LoanEntity {

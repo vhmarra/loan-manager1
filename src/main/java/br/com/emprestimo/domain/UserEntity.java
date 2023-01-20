@@ -11,7 +11,7 @@ import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_tb")
+@Table(name = "USER_TB")
 @Data
 @NoArgsConstructor
 public class UserEntity {
