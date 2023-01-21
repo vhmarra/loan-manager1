@@ -1,5 +1,6 @@
 package br.com.emprestimo;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import br.com.emprestimo.domain.LoanEntity;
 import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.LoanRequest;
@@ -27,6 +28,8 @@ public class LoanRequestTest {
     private static final String USER_TEST_EMAIL = "email@email.com";
     private static final String USER_TEST_NAME = "Nome teste";
 
+    private static final String USER_TEST_PWD = "teste";
+
     private static final LocalDate TODAY = LocalDate.now();
 
     private static final LocalDate TODAY_PLUS_30 = TODAY.plusDays(30L);
@@ -46,6 +49,7 @@ public class LoanRequestTest {
         request.setCpf(USER_TEST_CPF);
         request.setEmail(USER_TEST_EMAIL);
         request.setName(USER_TEST_NAME);
+        request.setPassword(USER_TEST_PWD);
         var savedUser = saveUser(request,Boolean.FALSE);
         var loanRequest = buildLoanRequest(BigDecimal.valueOf(3000L),TODAY,TODAY_PLUS_30,savedUser.getCpf());
 
@@ -58,6 +62,7 @@ public class LoanRequestTest {
         request.setCpf(USER_TEST_CPF);
         request.setEmail(USER_TEST_EMAIL);
         request.setName(USER_TEST_NAME);
+        request.setPassword(USER_TEST_PWD);
         var savedUser = saveUser(request,Boolean.TRUE);
         var loanRequestOne = buildLoanRequest(BigDecimal.valueOf(3000L),TODAY,TODAY_PLUS_30,savedUser.getCpf());
         var loanRequestTwo = buildLoanRequest(BigDecimal.valueOf(3000L),TODAY,TODAY_PLUS_30,savedUser.getCpf());
@@ -70,6 +75,7 @@ public class LoanRequestTest {
         request.setCpf(user.getCpf());
         request.setEmail(user.getEmail());
         request.setName(user.getName());
+        request.setPassword(user.getPassword());
         var user1 = new UserEntity(request);
         user1.setIsUserActive(userStatus);
         return userRepository.save(user1);

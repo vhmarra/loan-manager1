@@ -27,7 +27,7 @@ public class LoanPaymentsEntity {
     private UUID paymentId;
 
     @Column(name = "loan_value")
-    private BigDecimal paymentValue;
+    private Double paymentValue;
 
     @Column(name = "loan_payment_supposed_day")
     private LocalDate paymentSupposedPayDay;

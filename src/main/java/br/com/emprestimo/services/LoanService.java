@@ -4,6 +4,7 @@ import br.com.emprestimo.domain.LoanEntity;
 import br.com.emprestimo.domain.LoanPaymentsEntity;
 import br.com.emprestimo.dtos.LoanRequest;
 import br.com.emprestimo.exception.InvalidLoanTimeFrameException;
+import br.com.emprestimo.exception.PaymentNotFoundException;
 import br.com.emprestimo.exception.UserAlreadyHasUnpayLoansException;
 import br.com.emprestimo.repositories.LoanPaymentsRepository;
 import br.com.emprestimo.repositories.LoanRepository;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.jni.Local;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,6 +24,7 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -29,13 +32,11 @@ import java.util.UUID;
 @Slf4j
 public class LoanService {
 
-    private static final Long THREE_WEEKS_IN_DAYS = 21L;
-    private static final Long THIRTY_YEARS_IN_DAYS = 10958L;
-
     private final LoanRepository repository;
-
     private final LoanPaymentsRepository loanPaymentsRepository;
     private final UserRepository userRepository;
+
+    private final Environment env;
 
     @Transactional
     public void requestLoan(LoanRequest request) {
@@ -64,12 +65,22 @@ public class LoanService {
         }
     }
 
+    @Transactional
     public void payLoan(UUID loanId) {
-        var loan = repository.findById(loanId);
-        if (loan.isPresent() && loan.get().getIsApproved() && loan.get().getUser().getIsUserActive()) {
-            loan.get().setIsPayed(Boolean.TRUE);
-            repository.save(loan.get());
+        var loan = repository.findById(loanId).orElseThrow(() -> new PaymentNotFoundException("Loan not found"));
+        var loanPayments = loanPaymentsRepository.findAllByLoan(loan);
+        if (loan.getIsApproved() && loan.getUser().getIsUserActive()) {
+            loan.setIsPayed(Boolean.TRUE);
+            loanPayments.forEach(it -> {
+                it.setIsPayed(Boolean.TRUE);
+                it.setPaymentDay(LocalDate.now());
+            });
+            repository.save(loan);
+            log.info("Loan {} payed",loan.getLoanId());
+            loanPaymentsRepository.saveAll(loanPayments);
+            log.info("All {} payments referent do Loan {} is payed",loanPayments.size(),loan.getLoanId());
         } else {
+            log.error("Error while pay loan = {}",loanId);
             throw new UnsupportedOperationException("error to pay loan");
         }
     }
@@ -82,9 +93,10 @@ public class LoanService {
     }
 
     private List<LoanPaymentsEntity> createLoanPayments(LoanEntity loan) {
-        var monthsToDue = ChronoUnit.MONTHS.between(LocalDate.now().withDayOfMonth(1),loan.getLoanDateDue().withDayOfMonth(1));
+        var monthsToDue = (int) ChronoUnit.MONTHS.between(LocalDate.now().withDayOfMonth(1),loan.getLoanDateDue().withDayOfMonth(1));
         var loanPayments = new ArrayList<LoanPaymentsEntity>();
-        var monthlyValue = loan.getLoanValue().divide(BigDecimal.valueOf(monthsToDue), RoundingMode.HALF_UP);
+        var monthlyValue = (loan.getLoanValue().toBigInteger().doubleValue() / monthsToDue) +
+                ((loan.getLoanValue().toBigInteger().doubleValue() / monthsToDue) * getInterestValue());
         for (int i = 0; i < monthsToDue ; i++) {
             var loanPayment = new LoanPaymentsEntity();
             loanPayment.setLoan(loan);
@@ -93,6 +105,10 @@ public class LoanService {
             loanPayments.add(loanPayment);
         }
         return loanPayments;
+    }
+
+    private Double getInterestValue() {
+        return Double.valueOf(Objects.requireNonNull(env.getProperty("loan.interest.value")));
     }
 
 }

@@ -26,6 +26,8 @@ public class UserSignUpTest {
     private static String USER_TEST_EMAIL = "email@email.com";
     private static String USER_TEST_NAME = "Nome teste";
 
+    private static final String USER_TEST_PWD = "teste";
+
     @Autowired
     private UserService service;
 
@@ -38,6 +40,7 @@ public class UserSignUpTest {
         request.setCpf(USER_TEST_WRONG_CPF);
         request.setEmail(USER_TEST_EMAIL);
         request.setName(USER_TEST_NAME);
+        request.setPassword(USER_TEST_PWD);
         var user1 = new UserEntity(request);
 
        assertThrows(InvalidCPFException.class, () -> CpfValidation.validateCpf(user1.getCpf()));
@@ -49,6 +52,7 @@ public class UserSignUpTest {
         request.setCpf(USER_TEST_CPF);
         request.setEmail(USER_TEST_EMAIL);
         request.setName(USER_TEST_NAME);
+        request.setPassword(USER_TEST_PWD);
         var user1 = new UserEntity(request);
         service.signUpUser(request);
 
@@ -63,6 +67,7 @@ public class UserSignUpTest {
         request.setCpf(USER_TEST_CPF);
         request.setEmail(USER_TEST_EMAIL);
         request.setName(USER_TEST_NAME);
+        request.setPassword(USER_TEST_PWD);
         var user1 = new UserEntity(request);
         service.signUpUser(request);
 
