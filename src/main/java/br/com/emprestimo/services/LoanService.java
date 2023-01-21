@@ -32,15 +32,17 @@ import java.util.UUID;
 @Slf4j
 public class LoanService {
 
+    private static final Long THIRTY_YEARS_IN_DAYS = 10958L;
+
     private final LoanRepository repository;
     private final LoanPaymentsRepository loanPaymentsRepository;
     private final UserRepository userRepository;
-
     private final Environment env;
 
     @Transactional
     public void requestLoan(LoanRequest request) {
         loanIsEligible(request.getLoanValue(),request.getLoanDateSigned(),request.getLoanDateDue());
+        validateMaxLoanTime(request);
         var user = userRepository.findUserByCpf(request.getUserCpf());
         if (user.isPresent() && user.get().getIsUserActive()) {
             var loan = new LoanEntity(request);
@@ -50,6 +52,7 @@ public class LoanService {
             log.info("Loan saved {}",loan.getLoanId());
             var loanPayments = createLoanPayments(loanSaved);
             loanPaymentsRepository.saveAll(loanPayments);
+            log.info("All {} payments referent to the loan {} is created",loanPayments.size(),loan.getLoanId());
         } else {
             throw new UnsupportedOperationException("error while save loan");
         }
@@ -93,7 +96,7 @@ public class LoanService {
     }
 
     private List<LoanPaymentsEntity> createLoanPayments(LoanEntity loan) {
-        var monthsToDue = (int) ChronoUnit.MONTHS.between(LocalDate.now().withDayOfMonth(1),loan.getLoanDateDue().withDayOfMonth(1));
+        var monthsToDue = (int) ChronoUnit.MONTHS.between(loan.getLoanDateSigned().withDayOfMonth(1),loan.getLoanDateDue().withDayOfMonth(1));
         var loanPayments = new ArrayList<LoanPaymentsEntity>();
         var monthlyValue = (loan.getLoanValue().toBigInteger().doubleValue() / monthsToDue) +
                 ((loan.getLoanValue().toBigInteger().doubleValue() / monthsToDue) * getInterestValue());
@@ -109,6 +112,17 @@ public class LoanService {
 
     private Double getInterestValue() {
         return Double.valueOf(Objects.requireNonNull(env.getProperty("loan.interest.value")));
+    }
+
+    private void validateMaxLoanTime(LoanRequest loan) {
+        var loanTotalDays = ChronoUnit
+                .DAYS
+                .between(LocalDate.parse(loan.getLoanDateSigned()),
+                        LocalDate.parse(loan.getLoanDateDue()).plusDays(1L));
+        if (loanTotalDays > THIRTY_YEARS_IN_DAYS) {
+            log.warn("Loan has a max time of 30 years");
+            throw new InvalidLoanTimeFrameException("Loan has a max time of 30 years");
+        }
     }
 
 }
