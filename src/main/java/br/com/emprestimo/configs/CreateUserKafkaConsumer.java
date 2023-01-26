@@ -19,8 +19,9 @@ public class CreateUserKafkaConsumer {
 
     @KafkaListener(topics = "create.user.topic",groupId = "group-id")
     void createUser(String request) {
-        log.info("Creating user -> {}",request);
-        service.signUpUser(UserSignUpRequest.fromString(request));
+        var user = UserSignUpRequest.fromString(request);
+        log.info("Creating user -> cpf:{} name:{}",user.getCpf(),user.getName());
+        service.signUpUser(user);
     }
 
 }

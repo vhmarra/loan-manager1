@@ -5,11 +5,13 @@ import br.com.emprestimo.dtos.UserResponse;
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.services.UserService;
 import br.com.emprestimo.utils.CpfValidation;
+
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("api/v1/user")
