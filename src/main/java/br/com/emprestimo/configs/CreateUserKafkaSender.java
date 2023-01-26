@@ -16,14 +16,13 @@ public class CreateUserKafkaSender {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-
     @Autowired
     public CreateUserKafkaSender(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     public void sendMessage(UserSignUpRequest request) {
-        log.info("Sending message-> {} to topic -> {}",request,Topics.CREATE_USER_TOPIC.getTopicName());
+        log.info("Sending message to topic -> {}",Topics.CREATE_USER_TOPIC.getTopicName());
         kafkaTemplate.send(Topics.CREATE_USER_TOPIC.getTopicName(),request.toString());
     }
 }
