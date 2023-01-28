@@ -1,3 +1,3 @@
--To initiate the docker image for the database and kafka(will be implemented in a future commit)
-- docker volume create db_volume
-- docker-compose up
+-To initiate the docker image for the database and kafka
+- docker-compose up -d  -> detach mode
+- Swagger local -> localhost:9696/swagger-ui.html#/
