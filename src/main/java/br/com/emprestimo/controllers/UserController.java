@@ -1,6 +1,5 @@
 package br.com.emprestimo.controllers;
 
-import br.com.emprestimo.configs.CreateUserKafkaSender;
 import br.com.emprestimo.dtos.UserResponse;
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.services.UserService;
@@ -19,11 +18,11 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService service;
-    private final CreateUserKafkaSender createUserKafkaSender;
+
 
     @PostMapping
     public ResponseEntity<?> userSignUp(@RequestBody UserSignUpRequest request) {
-        createUserKafkaSender.sendMessage(request);
+        service.sendUserToQueue(request);
         return ResponseEntity.ok().build();
     }
 

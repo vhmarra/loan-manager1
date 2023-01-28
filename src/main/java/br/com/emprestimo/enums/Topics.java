@@ -7,7 +7,8 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public enum Topics {
-    CREATE_USER_TOPIC("create.user.topic");
+    CREATE_USER_TOPIC("create.user.topic"),
+    CREATE_PAYMENTS_TOPIC("create.payments.topic");
 
     public final String topicName;
 

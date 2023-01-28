@@ -6,6 +6,7 @@ import br.com.emprestimo.dtos.LoanRequest;
 import br.com.emprestimo.exception.InvalidLoanTimeFrameException;
 import br.com.emprestimo.exception.PaymentNotFoundException;
 import br.com.emprestimo.exception.UserAlreadyHasUnpayLoansException;
+import br.com.emprestimo.kafka.CreatePaymentsKafkaSender;
 import br.com.emprestimo.repositories.LoanPaymentsRepository;
 import br.com.emprestimo.repositories.LoanRepository;
 import br.com.emprestimo.repositories.UserRepository;
@@ -37,7 +38,7 @@ public class LoanService {
     private final LoanRepository repository;
     private final LoanPaymentsRepository loanPaymentsRepository;
     private final UserRepository userRepository;
-    private final Environment env;
+    private final CreatePaymentsKafkaSender kafkaSender;
 
     @Transactional
     public void requestLoan(LoanRequest request) {
@@ -49,10 +50,8 @@ public class LoanService {
             loan.setUser(user.get());
             log.info("Saving loan {}",loan.getLoanId());
             var loanSaved = repository.save(loan);
-            log.info("Loan saved {}",loan.getLoanId());
-            var loanPayments = createLoanPayments(loanSaved);
-            loanPaymentsRepository.saveAll(loanPayments);
-            log.info("All {} payments referent to the loan {} is created",loanPayments.size(),loan.getLoanId());
+            log.info("Loan saved {}",loanSaved.getLoanId());
+            kafkaSender.sendMessage(loanSaved.getLoanId().toString());
         } else {
             throw new UnsupportedOperationException("error while save loan");
         }
@@ -93,25 +92,6 @@ public class LoanService {
         if (!loans.isEmpty()) {
             throw new UserAlreadyHasUnpayLoansException("User already has unpay loans");
         }
-    }
-
-    private List<LoanPaymentsEntity> createLoanPayments(LoanEntity loan) {
-        var monthsToDue = (int) ChronoUnit.MONTHS.between(loan.getLoanDateSigned().withDayOfMonth(1),loan.getLoanDateDue().withDayOfMonth(1));
-        var loanPayments = new ArrayList<LoanPaymentsEntity>();
-        var monthlyValue = (loan.getLoanValue().toBigInteger().doubleValue() / monthsToDue) +
-                ((loan.getLoanValue().toBigInteger().doubleValue() / monthsToDue) * getInterestValue());
-        for (int i = 0; i < monthsToDue ; i++) {
-            var loanPayment = new LoanPaymentsEntity();
-            loanPayment.setLoan(loan);
-            loanPayment.setPaymentSupposedPayDay(LocalDate.now().plusMonths(i).withDayOfMonth(1));
-            loanPayment.setPaymentValue(monthlyValue);
-            loanPayments.add(loanPayment);
-        }
-        return loanPayments;
-    }
-
-    private Double getInterestValue() {
-        return Double.valueOf(Objects.requireNonNull(env.getProperty("loan.interest.value")));
     }
 
     private void validateMaxLoanTime(LoanRequest loan) {

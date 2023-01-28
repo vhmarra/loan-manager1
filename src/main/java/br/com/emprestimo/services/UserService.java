@@ -1,6 +1,6 @@
 package br.com.emprestimo.services;
 
-import br.com.caelum.stella.validation.InvalidStateException;
+import br.com.emprestimo.kafka.CreateUserKafkaSender;
 import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.LoanResponse;
 import br.com.emprestimo.dtos.UserResponse;
@@ -8,7 +8,6 @@ import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.exception.UserNotFoundException;
 import br.com.emprestimo.repositories.LoanRepository;
 import br.com.emprestimo.repositories.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final LoanRepository loanRepository;
+    private final CreateUserKafkaSender createUserKafkaSender;
 
     @Transactional
     public void signUpUser(UserSignUpRequest request) {
@@ -61,5 +61,9 @@ public class UserService {
             return userResponse;
         }
         return new UserResponse();
+    }
+
+    public void sendUserToQueue(UserSignUpRequest request) {
+        createUserKafkaSender.sendMessage(request);
     }
 }

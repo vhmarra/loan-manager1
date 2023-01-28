@@ -1,4 +1,4 @@
-package br.com.emprestimo.configs;
+package br.com.emprestimo.kafka;
 
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.enums.Topics;
