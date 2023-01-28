@@ -1,8 +1,6 @@
 package br.com.emprestimo.kafka.consumer;
 
-import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.services.LoanPaymentService;
-import br.com.emprestimo.services.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
