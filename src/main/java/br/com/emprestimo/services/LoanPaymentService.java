@@ -42,7 +42,7 @@ public class LoanPaymentService {
         log.info("All {} loan payments from loan -> {} is saved",loanPayments.size(),loanId);
     }
 
-    private List<LoanPaymentsEntity> createLoanPayments(LoanEntity loan) {
+    public List<LoanPaymentsEntity> createLoanPayments(LoanEntity loan) {
         var monthsToDue = (int) ChronoUnit.MONTHS.between(loan.getLoanDateSigned().withDayOfMonth(1),loan.getLoanDateDue().withDayOfMonth(1));
         var loanPayments = new ArrayList<LoanPaymentsEntity>();
         var monthlyValue = (loan.getLoanValue().toBigInteger().doubleValue() / monthsToDue) +

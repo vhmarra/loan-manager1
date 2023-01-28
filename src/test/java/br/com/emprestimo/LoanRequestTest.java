@@ -6,8 +6,10 @@ import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.LoanRequest;
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.exception.UserAlreadyHasUnpayLoansException;
+import br.com.emprestimo.repositories.LoanPaymentsRepository;
 import br.com.emprestimo.repositories.LoanRepository;
 import br.com.emprestimo.repositories.UserRepository;
+import br.com.emprestimo.services.LoanPaymentService;
 import br.com.emprestimo.services.LoanService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles("test")
@@ -42,6 +45,12 @@ public class LoanRequestTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private LoanPaymentsRepository loanPaymentsRepository;
+
+    @Autowired
+    private LoanPaymentService loanPaymentService;
 
     @Test
     void should_not_save_loan_when_user_is_not_active() {
@@ -70,6 +79,25 @@ public class LoanRequestTest {
 
         assertThrows(UserAlreadyHasUnpayLoansException.class, () -> service.requestLoan(loanRequestTwo));
     }
+
+    @Test
+    void should_create_loan_payments_when_create_loan() {
+        var request = new UserSignUpRequest();
+        request.setCpf(USER_TEST_CPF);
+        request.setEmail(USER_TEST_EMAIL);
+        request.setName(USER_TEST_NAME);
+        request.setPassword(USER_TEST_PWD);
+        var savedUser = saveUser(request,Boolean.TRUE);
+        var loanRequest = buildLoanRequest(BigDecimal.valueOf(3000L),TODAY,TODAY_PLUS_30.plusMonths(11L),savedUser.getCpf());
+        var savedLoan = repository.save(buildLoanEntity(loanRequest,savedUser));
+        var loanPayments = loanPaymentService.createLoanPayments(savedLoan);
+
+        assertEquals(12,loanPayments.size());
+        loanPayments.forEach(it -> {
+            assertEquals(savedLoan.getLoanId(),it.getLoan().getLoanId());
+        });
+    }
+
     private UserEntity saveUser(UserSignUpRequest user, Boolean userStatus) {
         var request = new UserSignUpRequest();
         request.setCpf(user.getCpf());
