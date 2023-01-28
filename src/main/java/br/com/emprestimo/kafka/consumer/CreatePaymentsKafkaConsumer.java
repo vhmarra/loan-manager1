@@ -1,4 +1,4 @@
-package br.com.emprestimo.kafka;
+package br.com.emprestimo.kafka.consumer;
 
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.services.LoanPaymentService;

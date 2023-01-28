@@ -1,4 +1,4 @@
-package br.com.emprestimo.kafka;
+package br.com.emprestimo.kafka.producer;
 
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.enums.Topics;
@@ -11,18 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class CreatePaymentsKafkaSender {
+public class CreateUserKafkaSender {
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
-    public CreatePaymentsKafkaSender(KafkaTemplate<String, String> kafkaTemplate) {
+    public CreateUserKafkaSender(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(String loanId) {
-        log.info("Sending message to topic -> {}",Topics.CREATE_PAYMENTS_TOPIC.getTopicName());
-        kafkaTemplate.send(Topics.CREATE_PAYMENTS_TOPIC.getTopicName(),loanId);
+    public void sendMessage(UserSignUpRequest request) {
+        log.info("Sending message to topic -> {}",Topics.CREATE_USER_TOPIC.getTopicName());
+        kafkaTemplate.send(Topics.CREATE_USER_TOPIC.getTopicName(),request.toString());
     }
 }

@@ -1,6 +1,6 @@
 package br.com.emprestimo.services;
 
-import br.com.emprestimo.kafka.CreateUserKafkaSender;
+import br.com.emprestimo.kafka.producer.CreateUserKafkaSender;
 import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.LoanResponse;
 import br.com.emprestimo.dtos.UserResponse;
