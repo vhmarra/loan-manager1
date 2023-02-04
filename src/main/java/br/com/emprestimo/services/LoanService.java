@@ -49,10 +49,10 @@ public class LoanService {
     }
     @Transactional
     public void updateLoanStatus(UUID loanId, String loanStatus) {
-        var loan = repository.findById(loanId);
-        if (loan.isPresent() && loan.get().getUser().getIsUserActive()) {
-            loan.get().setIsApproved(Boolean.valueOf(loanStatus));
-            repository.save(loan.get());
+        var loan = repository.findById(loanId).orElseThrow(() -> new PaymentNotFoundException("Loan not found"));
+        if (loan.getUser().getIsUserActive()) {
+            loan.setIsApproved(Boolean.valueOf(loanStatus));
+            repository.save(loan);
         } else {
             throw new UnsupportedOperationException("loan not found or user is not activated");
         }

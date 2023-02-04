@@ -30,6 +30,9 @@ public class LoanEntity {
     @Column(name = "loan_value")
     private BigDecimal loanValue;
 
+    @Column(name = "value_already_payed")
+    private BigDecimal valueAlreadyPayed;
+
     @Column(name = "approved")
     private Boolean isApproved;
 
@@ -58,6 +61,7 @@ public class LoanEntity {
                 ,LocalDate.parse(request.getLoanDateDue(), DateTimeFormatter.ISO_LOCAL_DATE));
         this.isApproved = Boolean.FALSE;
         this.isPayed = Boolean.FALSE;
+        this.valueAlreadyPayed = BigDecimal.ZERO;
     }
 
     private LoanTimeFrame validateTimeFrame(LocalDate signed, LocalDate due) {

@@ -28,6 +28,9 @@ public class UserResponse {
     @JsonProperty(value = "user_loans")
     private List<LoanResponse> loanResponses = new ArrayList<>();
 
+    @JsonProperty(value = "loan_payments")
+    private List<LoanPaymentResponse> loanPaymentResponses = new ArrayList<>();
+
     public UserResponse(@NotNull UserEntity user) {
         this.cpf = user.getCpf();
         this.email = user.getEmail();

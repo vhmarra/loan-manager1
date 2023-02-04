@@ -1,11 +1,13 @@
 package br.com.emprestimo.services;
 
+import br.com.emprestimo.dtos.LoanPaymentResponse;
 import br.com.emprestimo.kafka.producer.CreateUserKafkaSender;
 import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.LoanResponse;
 import br.com.emprestimo.dtos.UserResponse;
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.exception.UserNotFoundException;
+import br.com.emprestimo.repositories.LoanPaymentsRepository;
 import br.com.emprestimo.repositories.LoanRepository;
 import br.com.emprestimo.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final LoanRepository loanRepository;
+
+    private final LoanPaymentsRepository loanPaymentsRepository;
     private final CreateUserKafkaSender createUserKafkaSender;
 
     @Transactional
@@ -53,11 +57,18 @@ public class UserService {
             var userResponse = new UserResponse(user.get());
             var loans = loanRepository.findAllByUserId(user.get().getId());
             var loansResponse = new ArrayList<LoanResponse>();
+            var loanPaymentsResponse = new ArrayList<LoanPaymentResponse>();
             loans.forEach(loanEntity -> {
                 var loanResponse = new LoanResponse(loanEntity);
+                var loanPaymentsEntity = loanPaymentsRepository.findAllByLoan(loanEntity);
+                loanPaymentsEntity.forEach(it -> {
+                    var loanPaymentResponse = new LoanPaymentResponse(it);
+                    loanPaymentsResponse.add(loanPaymentResponse);
+                });
                 loansResponse.add(loanResponse);
             });
             userResponse.setLoanResponses(loansResponse);
+            userResponse.setLoanPaymentResponses(loanPaymentsResponse);
             return userResponse;
         }
         return new UserResponse();
