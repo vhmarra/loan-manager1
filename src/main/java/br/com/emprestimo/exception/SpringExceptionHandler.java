@@ -12,27 +12,27 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class SpringExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = InvalidCPFException.class)
-    ResponseEntity<Object> InvalidCPFHandler(RuntimeException rtex, WebRequest request) {
-        return handleExceptionInternal(rtex, rtex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    ResponseEntity<Object> InvalidCPFHandler(RuntimeException rte, WebRequest request) {
+        return handleExceptionInternal(rte, rte.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(value = UserNotFoundException.class)
-    ResponseEntity<Object> UserNotFoundHandler(RuntimeException rtex, WebRequest request) {
-        return handleExceptionInternal(rtex, rtex.getMessage(), new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, request);
+    ResponseEntity<Object> UserNotFoundHandler(RuntimeException rte, WebRequest request) {
+        return handleExceptionInternal(rte, rte.getMessage(), new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, request);
     }
 
     @ExceptionHandler(value = UserAlreadyHasUnpayLoansException.class)
-    ResponseEntity<Object> UserAlreadyHasUnpayLoansExceptionHandler(RuntimeException rtex, WebRequest request) {
-        return handleExceptionInternal(rtex, rtex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    ResponseEntity<Object> UserAlreadyHasUnpayLoansExceptionHandler(RuntimeException rte, WebRequest request) {
+        return handleExceptionInternal(rte, rte.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(value = PaymentNotFoundException.class)
-    ResponseEntity<Object> PaymentNotFoundExceptionHandler(RuntimeException rtex, WebRequest request) {
-        return handleExceptionInternal(rtex, rtex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    ResponseEntity<Object> PaymentNotFoundExceptionHandler(RuntimeException rte, WebRequest request) {
+        return handleExceptionInternal(rte, rte.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(value = UnsupportedOperationException.class)
-    ResponseEntity<Object> UnsupportedOperationExceptionHandler(RuntimeException rtex, WebRequest request) {
-        return handleExceptionInternal(rtex, rtex.getMessage(), new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, request);
+    ResponseEntity<Object> UnsupportedOperationExceptionHandler(RuntimeException rte, WebRequest request) {
+        return handleExceptionInternal(rte, rte.getMessage(), new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, request);
     }
 }
