@@ -1,18 +1,12 @@
 package br.com.emprestimo.domain;
 
-import br.com.emprestimo.dtos.LoanRequest;
-import br.com.emprestimo.enums.LoanTimeFrame;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
-
-import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Table(name = "LOAN_PAYMENTS_TB")

@@ -1,11 +1,12 @@
 package br.com.emprestimo.controllers;
 
-import br.com.emprestimo.dtos.LoanRequest;
 import br.com.emprestimo.services.LoanPaymentService;
-import br.com.emprestimo.services.LoanService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 

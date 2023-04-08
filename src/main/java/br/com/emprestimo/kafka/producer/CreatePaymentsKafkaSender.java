@@ -1,6 +1,5 @@
 package br.com.emprestimo.kafka.producer;
 
-import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.enums.Topics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

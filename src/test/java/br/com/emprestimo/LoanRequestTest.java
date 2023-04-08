@@ -1,6 +1,5 @@
 package br.com.emprestimo;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import br.com.emprestimo.domain.LoanEntity;
 import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.LoanRequest;

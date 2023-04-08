@@ -1,13 +1,9 @@
 package br.com.emprestimo.dtos;
 
-import br.com.emprestimo.domain.LoanEntity;
 import br.com.emprestimo.domain.LoanPaymentsEntity;
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import javax.persistence.Column;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
