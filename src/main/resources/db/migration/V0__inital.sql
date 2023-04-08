@@ -1,6 +1,8 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 
 CREATE TABLE user_tb (
-	user_id int8 GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
+	user_id int8 PRIMARY KEY,
 	user_cpf varchar(255) UNIQUE NOT NULL,
 	date_sign timestamp NULL,
 	user_email varchar(255) UNIQUE NOT NULL,
@@ -11,7 +13,7 @@ CREATE TABLE user_tb (
 );
 
 CREATE TABLE loan_tb (
-	loan_id varchar(255) PRIMARY KEY NOT NULL,
+	loan_id uuid DEFAULT uuid_generate_v4 (),
 	approved bool NULL,
 	is_payed bool NULL,
 	loan_date_due date NULL,
@@ -20,15 +22,17 @@ CREATE TABLE loan_tb (
 	loan_value numeric(19, 2) NULL,
 	value_already_payed numeric(19, 2) NULL,
 	user_id int8 NOT NULL,
-	CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES public.user_tb(user_id)
+	PRIMARY KEY (loan_id),
+	CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES user_tb(user_id)
 );
 
 CREATE TABLE loan_payments_tb (
-	payment_id varchar(255) PRIMARY KEY NOT NULL,
+	payment_id uuid DEFAULT uuid_generate_v4 (),
 	is_payed bool NULL,
 	loan_date_payed date NULL,
 	loan_payment_supposed_day date NULL,
 	loan_value float8 NULL,
-	loan_id varchar(255) NOT NULL,
-	CONSTRAINT fk_loan FOREIGN KEY (loan_id) REFERENCES public.loan_tb(loan_id)
+	loan_id uuid NOT NULL,
+	PRIMARY KEY (payment_id),
+	CONSTRAINT fk_loan FOREIGN KEY (loan_id) REFERENCES loan_tb(loan_id)
 );

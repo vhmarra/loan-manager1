@@ -21,9 +21,9 @@ import static javax.persistence.EnumType.STRING;
 public class LoanPaymentsEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "payment_id")
-    @Type(type = "uuid-char")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "payment_id", columnDefinition = "uuid")
+    @Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID paymentId;
 
     @Column(name = "loan_value")
