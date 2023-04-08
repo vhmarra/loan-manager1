@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles("test")
 @SpringBootTest
-public class LoanRequestTest {
+class LoanRequestTest {
 
     private static final String USER_TEST_WRONG_CPF = "1998";
     private static final String USER_TEST_CPF = "78142440644";

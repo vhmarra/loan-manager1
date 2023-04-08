@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 @ActiveProfiles("test")
 @SpringBootTest
-public class UserSignUpTest {
+class UserSignUpTest {
 
     private static String USER_TEST_WRONG_CPF = "1998";
     private static String USER_TEST_CPF = "78142440644";
