@@ -5,6 +5,7 @@ import br.com.emprestimo.domain.LoanPaymentsEntity;
 import br.com.emprestimo.exception.PaymentNotFoundException;
 import br.com.emprestimo.repositories.LoanPaymentsRepository;
 import br.com.emprestimo.repositories.LoanRepository;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
@@ -18,9 +19,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Slf4j
 public class LoanPaymentService {
+
     private final LoanPaymentsRepository loanPaymentsRepository;
     private final LoanRepository loanRepository;
     private final Environment env;

@@ -36,7 +36,7 @@ public class LoanPaymentsEntity {
     private LocalDate paymentDay;
 
     @Column(name = "is_payed")
-    private Boolean isPayed;
+    private Boolean isPayed = false;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "loan_id")
