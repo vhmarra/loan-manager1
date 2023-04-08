@@ -38,6 +38,7 @@ dependencies {
 	implementation group: 'br.com.caelum.stella', name: 'caelum-stella-core', version: '2.1.5'
 	implementation group: 'at.favre.lib', name: 'bcrypt', version: '0.9.0'
 	implementation group: 'org.springframework', name: 'spring-aop', version: '5.3.24'
+	implementation 'org.flywaydb:flyway-core'
 
 }
 

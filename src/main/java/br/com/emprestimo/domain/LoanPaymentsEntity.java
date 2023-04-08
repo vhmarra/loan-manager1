@@ -21,7 +21,7 @@ import static javax.persistence.EnumType.STRING;
 public class LoanPaymentsEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id")
     @Type(type = "uuid-char")
     private UUID paymentId;
