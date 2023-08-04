@@ -22,8 +22,8 @@ public class LoanEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "loan_id")
-    @Type(type = "uuid-char")
+    @Column(name = "loan_id", columnDefinition = "uuid")
+    @Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID loanId;
 
     @Column(name = "loan_value")

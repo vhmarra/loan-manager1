@@ -16,8 +16,8 @@ public class LoanPaymentsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "payment_id")
-    @Type(type = "uuid-char")
+    @Column(name = "payment_id", columnDefinition = "uuid")
+    @Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID paymentId;
 
     @Column(name = "loan_value")
@@ -30,7 +30,7 @@ public class LoanPaymentsEntity {
     private LocalDate paymentDay;
 
     @Column(name = "is_payed")
-    private Boolean isPayed;
+    private Boolean isPayed = false;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "loan_id")
