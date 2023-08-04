@@ -1,6 +1,7 @@
 package br.com.emprestimo.kafka.producer;
 
 import br.com.emprestimo.enums.Topics;
+import br.com.emprestimo.utils.ParserConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
