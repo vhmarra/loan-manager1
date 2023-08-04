@@ -1,6 +1,5 @@
 package br.com.emprestimo;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import br.com.emprestimo.domain.LoanEntity;
 import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.LoanRequest;
@@ -59,23 +58,23 @@ public class LoanRequestTest {
         request.setEmail(USER_TEST_EMAIL);
         request.setName(USER_TEST_NAME);
         request.setPassword(USER_TEST_PWD);
-        var savedUser = saveUser(request,Boolean.FALSE);
-        var loanRequest = buildLoanRequest(BigDecimal.valueOf(3000L),TODAY,TODAY_PLUS_30,savedUser.getCpf());
+        var savedUser = saveUser(request, Boolean.FALSE);
+        var loanRequest = buildLoanRequest(BigDecimal.valueOf(3000L), TODAY, TODAY_PLUS_30, savedUser.getCpf());
 
         assertThrows(UnsupportedOperationException.class, () -> service.requestLoan(loanRequest));
     }
 
     @Test
-    void should_not_save_loan_when_user_already_have_loans(){
+    void should_not_save_loan_when_user_already_have_loans() {
         var request = new UserSignUpRequest();
         request.setCpf(USER_TEST_CPF);
         request.setEmail(USER_TEST_EMAIL);
         request.setName(USER_TEST_NAME);
         request.setPassword(USER_TEST_PWD);
-        var savedUser = saveUser(request,Boolean.TRUE);
-        var loanRequestOne = buildLoanRequest(BigDecimal.valueOf(3000L),TODAY,TODAY_PLUS_30,savedUser.getCpf());
-        var loanRequestTwo = buildLoanRequest(BigDecimal.valueOf(3000L),TODAY,TODAY_PLUS_30,savedUser.getCpf());
-        repository.save(buildLoanEntity(loanRequestOne,savedUser));
+        var savedUser = saveUser(request, Boolean.TRUE);
+        var loanRequestOne = buildLoanRequest(BigDecimal.valueOf(3000L), TODAY, TODAY_PLUS_30, savedUser.getCpf());
+        var loanRequestTwo = buildLoanRequest(BigDecimal.valueOf(3000L), TODAY, TODAY_PLUS_30, savedUser.getCpf());
+        repository.save(buildLoanEntity(loanRequestOne, savedUser));
 
         assertThrows(UserAlreadyHasUnpayLoansException.class, () -> service.requestLoan(loanRequestTwo));
     }
@@ -87,14 +86,14 @@ public class LoanRequestTest {
         request.setEmail(USER_TEST_EMAIL);
         request.setName(USER_TEST_NAME);
         request.setPassword(USER_TEST_PWD);
-        var savedUser = saveUser(request,Boolean.TRUE);
-        var loanRequest = buildLoanRequest(BigDecimal.valueOf(3000L),TODAY,TODAY_PLUS_30.plusMonths(11L),savedUser.getCpf());
-        var savedLoan = repository.save(buildLoanEntity(loanRequest,savedUser));
+        var savedUser = saveUser(request, Boolean.TRUE);
+        var loanRequest = buildLoanRequest(BigDecimal.valueOf(3000L), TODAY, TODAY_PLUS_30.plusMonths(11L), savedUser.getCpf());
+        var savedLoan = repository.save(buildLoanEntity(loanRequest, savedUser));
         var loanPayments = loanPaymentService.createLoanPayments(savedLoan);
 
-        assertEquals(12,loanPayments.size());
+        assertEquals(12, loanPayments.size());
         loanPayments.forEach(it -> {
-            assertEquals(savedLoan.getLoanId(),it.getLoan().getLoanId());
+            assertEquals(savedLoan.getLoanId(), it.getLoan().getLoanId());
         });
     }
 
@@ -111,7 +110,7 @@ public class LoanRequestTest {
 
     private LoanRequest buildLoanRequest(BigDecimal loanValue, LocalDate loanDateSigned, LocalDate loanDateDue,
                                          String userCpf) {
-        return new LoanRequest(loanValue,loanDateSigned.toString(),loanDateDue.toString(),userCpf);
+        return new LoanRequest(loanValue, loanDateSigned.toString(), loanDateDue.toString(), userCpf);
     }
 
     private LoanEntity buildLoanEntity(LoanRequest request, UserEntity user) {

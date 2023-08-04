@@ -3,7 +3,6 @@ package br.com.emprestimo.domain;
 import br.com.emprestimo.dtos.LoanRequest;
 import br.com.emprestimo.enums.LoanTimeFrame;
 import lombok.Data;
-
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
@@ -49,7 +48,7 @@ public class LoanEntity {
     @Column(name = "is_payed")
     private Boolean isPayed;
 
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
@@ -58,7 +57,7 @@ public class LoanEntity {
         this.loanDateSigned = LocalDate.parse(request.getLoanDateSigned(), DateTimeFormatter.ISO_LOCAL_DATE);
         this.loanDateDue = LocalDate.parse(request.getLoanDateDue(), DateTimeFormatter.ISO_LOCAL_DATE);
         this.loanTimeFrame = validateTimeFrame(LocalDate.parse(request.getLoanDateSigned(), DateTimeFormatter.ISO_LOCAL_DATE)
-                ,LocalDate.parse(request.getLoanDateDue(), DateTimeFormatter.ISO_LOCAL_DATE));
+                , LocalDate.parse(request.getLoanDateDue(), DateTimeFormatter.ISO_LOCAL_DATE));
         this.isApproved = Boolean.FALSE;
         this.isPayed = Boolean.FALSE;
         this.valueAlreadyPayed = BigDecimal.ZERO;

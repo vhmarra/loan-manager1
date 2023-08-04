@@ -1,6 +1,5 @@
 package br.com.emprestimo;
 
-import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.exception.InvalidCPFException;
@@ -17,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @ActiveProfiles("test")
 @SpringBootTest
 public class UserSignUpTest {
@@ -43,7 +43,7 @@ public class UserSignUpTest {
         request.setPassword(USER_TEST_PWD);
         var user1 = new UserEntity(request);
 
-       assertThrows(InvalidCPFException.class, () -> CpfValidation.validateCpf(user1.getCpf()));
+        assertThrows(InvalidCPFException.class, () -> CpfValidation.validateCpf(user1.getCpf()));
     }
 
     @Test
@@ -57,8 +57,8 @@ public class UserSignUpTest {
         service.signUpUser(request);
 
         var userSaved = repository.findUserByCpf(request.getCpf());
-        Assertions.assertNotEquals(Optional.empty(),userSaved);
-        Assertions.assertEquals(user1.getCpf(),userSaved.get().getCpf());
+        Assertions.assertNotEquals(Optional.empty(), userSaved);
+        Assertions.assertEquals(user1.getCpf(), userSaved.get().getCpf());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class UserSignUpTest {
         var user1 = new UserEntity(request);
         service.signUpUser(request);
 
-        assertThrows(UserNotFoundException.class, () -> service.updateUserStatus(USER_TEST_WRONG_CPF,"TRUE"));
+        assertThrows(UserNotFoundException.class, () -> service.updateUserStatus(USER_TEST_WRONG_CPF, "TRUE"));
 
     }
 }

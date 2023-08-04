@@ -2,6 +2,7 @@ package br.com.emprestimo.kafka.producer;
 
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.enums.Topics;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,11 @@ public class CreateUserKafkaSender {
     }
 
     public void sendMessage(UserSignUpRequest request) {
-        log.info("Sending message to topic -> {}",Topics.CREATE_USER_TOPIC.getTopicName());
-        kafkaTemplate.send(Topics.CREATE_USER_TOPIC.getTopicName(),request.toString());
+        log.info("Sending message to topic -> {}", Topics.CREATE_USER_TOPIC.getTopicName());
+
+        var parser = new Gson();
+        var userRequestParsed = parser.toJson(request);
+
+        kafkaTemplate.send(Topics.CREATE_USER_TOPIC.getTopicName(), userRequestParsed);
     }
 }

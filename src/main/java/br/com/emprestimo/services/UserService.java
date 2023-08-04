@@ -1,12 +1,12 @@
 package br.com.emprestimo.services;
 
-import br.com.emprestimo.dtos.LoanPaymentResponse;
-import br.com.emprestimo.kafka.producer.CreateUserKafkaSender;
 import br.com.emprestimo.domain.UserEntity;
+import br.com.emprestimo.dtos.LoanPaymentResponse;
 import br.com.emprestimo.dtos.LoanResponse;
 import br.com.emprestimo.dtos.UserResponse;
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.exception.UserNotFoundException;
+import br.com.emprestimo.kafka.producer.CreateUserKafkaSender;
 import br.com.emprestimo.repositories.LoanPaymentsRepository;
 import br.com.emprestimo.repositories.LoanRepository;
 import br.com.emprestimo.repositories.UserRepository;
@@ -26,7 +26,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final LoanRepository loanRepository;
-
     private final LoanPaymentsRepository loanPaymentsRepository;
     private final CreateUserKafkaSender createUserKafkaSender;
 

@@ -4,7 +4,6 @@ import br.com.emprestimo.dtos.UserResponse;
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.services.UserService;
 import br.com.emprestimo.utils.CpfValidation;
-
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,7 @@ public class UserController {
     @PatchMapping
     public ResponseEntity<?> userUpdate(@RequestHeader(name = "user-cpf") String userCpf,
                                         @RequestHeader(name = "boolean-value") String bolValue) {
-        service.updateUserStatus(userCpf,bolValue);
+        service.updateUserStatus(userCpf, bolValue);
         return ResponseEntity.ok().build();
     }
 
@@ -39,5 +38,4 @@ public class UserController {
         CpfValidation.validateCpf(userCpf);
         return ResponseEntity.of(Optional.of(service.getUserData(userCpf)));
     }
-
 }

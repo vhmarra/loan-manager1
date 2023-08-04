@@ -2,6 +2,7 @@ package br.com.emprestimo.kafka.consumer;
 
 import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.services.UserService;
+import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -14,11 +15,11 @@ public class CreateUserKafkaConsumer {
 
     private final UserService service;
 
-    @KafkaListener(topics = "create.user.topic",groupId = "group-id")
+    @KafkaListener(topics = "create.user.topic", groupId = "group-id")
     void createUser(String request) {
-        var user = UserSignUpRequest.fromString(request);
-        log.info("Creating user -> cpf:{} name:{}",user.getCpf(),user.getName());
-        service.signUpUser(user);
+        var parsedUser = new Gson().fromJson(request, UserSignUpRequest.class);
+        log.info("Creating user -> cpf:{} name:{}", parsedUser.getCpf(), parsedUser.getName());
+        service.signUpUser(parsedUser);
     }
 
 }

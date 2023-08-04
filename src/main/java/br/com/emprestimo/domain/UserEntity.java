@@ -21,10 +21,10 @@ public class UserEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "user_cpf",unique = true)
+    @Column(name = "user_cpf", unique = true)
     private String cpf;
 
-    @Column(name = "user_email",unique = true)
+    @Column(name = "user_email", unique = true)
     private String email;
 
     @Column(name = "password")
@@ -48,7 +48,7 @@ public class UserEntity {
         this.cpf = request.getCpf();
         this.email = request.getEmail();
         this.name = request.getName();
-        this.password = BCrypt.withDefaults().hashToString(4,request.getPassword().toCharArray());
+        this.password = BCrypt.withDefaults().hashToString(4, request.getPassword().toCharArray());
         this.dateSigned = LocalDateTime.now();
         this.isUserActive = Boolean.FALSE; //All users must me activated before request loans
         this.setSerasaScore(request.getSerasaScore());

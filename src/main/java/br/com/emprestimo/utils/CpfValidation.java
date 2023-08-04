@@ -14,7 +14,7 @@ public class CpfValidation {
         try {
             validator.assertValid(cpf);
         } catch (InvalidStateException ex) {
-            log.error("CPF {} is invalid",cpf);
+            log.error("CPF {} is invalid", cpf);
             throw new InvalidCPFException("CPF IS INVALID");
         }
     }

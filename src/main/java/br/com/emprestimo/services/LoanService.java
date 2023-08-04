@@ -33,24 +33,25 @@ public class LoanService {
 
     @Transactional
     public void requestLoan(LoanRequest request) {
-        loanIsEligible(request.getLoanValue(),request.getLoanDateSigned(),request.getLoanDateDue());
+        loanIsEligible(request.getLoanValue(), request.getLoanDateSigned(), request.getLoanDateDue());
         validateMaxLoanTime(request);
         var user = userRepository.findUserByCpf(request.getUserCpf());
         if (user.isPresent() && user.get().getIsUserActive()) {
             var loan = new LoanEntity(request);
             loan.setUser(user.get());
-            log.info("Saving loan {}",loan.getLoanId());
+            log.info("Saving loan {}", loan.getLoanId());
             var loanSaved = repository.save(loan);
-            log.info("Loan saved {}",loanSaved.getLoanId());
+            log.info("Loan saved {}", loanSaved.getLoanId());
             kafkaSender.sendMessage(loanSaved.getLoanId().toString());
         } else {
             throw new UnsupportedOperationException("error while save loan");
         }
     }
+
     @Transactional
     public void updateLoanStatus(UUID loanId, String loanStatus) {
         var loan = repository.findById(loanId).orElseThrow(() -> new PaymentNotFoundException("Loan not found"));
-        if (loan.getUser().getIsUserActive()) {
+        if (Boolean.TRUE.equals(loan.getUser().getIsUserActive())) {
             loan.setIsApproved(Boolean.valueOf(loanStatus));
             repository.save(loan);
         } else {
@@ -69,17 +70,17 @@ public class LoanService {
                 it.setPaymentDay(LocalDate.now());
             });
             repository.save(loan);
-            log.info("Loan {} payed",loan.getLoanId());
+            log.info("Loan {} payed", loan.getLoanId());
             loanPaymentsRepository.saveAll(loanPayments);
-            log.info("All {} payments referent do Loan {} is payed",loanPayments.size(),loan.getLoanId());
+            log.info("All {} payments referent do Loan {} is payed", loanPayments.size(), loan.getLoanId());
         } else {
-            log.error("Error while pay loan = {}",loanId);
+            log.error("Error while pay loan = {}", loanId);
             throw new UnsupportedOperationException("error to pay loan");
         }
     }
 
     private void loanIsEligible(BigDecimal loanValue, String dateSign, String dateDue) {
-        var loans = repository.findLoanByValueAndDates(loanValue,LocalDate.parse(dateSign),LocalDate.parse(dateDue),false);
+        var loans = repository.findLoanByValueAndDates(loanValue, LocalDate.parse(dateSign), LocalDate.parse(dateDue), false);
         if (!loans.isEmpty()) {
             throw new UserAlreadyHasUnpayLoansException("User already has unpay loans");
         }

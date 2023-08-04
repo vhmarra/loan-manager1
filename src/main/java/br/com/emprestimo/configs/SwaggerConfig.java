@@ -3,7 +3,6 @@ package br.com.emprestimo.configs;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -16,7 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig{
+public class SwaggerConfig {
 
     private final Environment env;
 
@@ -35,7 +34,7 @@ public class SwaggerConfig{
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder().title("Emprestimos")
                 .version(env.getProperty("app.version"))
-                .contact(new Contact("Victor Hugo","https://github.com/vhmarra","marravh@gmail.com"))
+                .contact(new Contact("Victor Hugo", "https://github.com/vhmarra", "marravh@gmail.com"))
                 .build();
     }
 }

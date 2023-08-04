@@ -1,6 +1,5 @@
 package br.com.emprestimo.configs;
 
-import br.com.emprestimo.dtos.UserSignUpRequest;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;

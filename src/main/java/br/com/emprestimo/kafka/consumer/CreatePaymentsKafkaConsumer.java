@@ -13,9 +13,9 @@ public class CreatePaymentsKafkaConsumer {
 
     private final LoanPaymentService service;
 
-    @KafkaListener(topics = "create.payments.topic",groupId = "group-id")
+    @KafkaListener(topics = "create.payments.topic", groupId = "group-id")
     void createUser(String loanId) {
-        log.info("Creating loan payments from loan -> {}",loanId);
+        log.info("Creating loan payments from loan -> {}", loanId);
         service.createLoanPayments(loanId);
     }
 

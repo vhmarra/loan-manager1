@@ -1,6 +1,5 @@
 package br.com.emprestimo.kafka.producer;
 
-import br.com.emprestimo.dtos.UserSignUpRequest;
 import br.com.emprestimo.enums.Topics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,7 @@ public class CreatePaymentsKafkaSender {
     }
 
     public void sendMessage(String loanId) {
-        log.info("Sending message to topic -> {}",Topics.CREATE_PAYMENTS_TOPIC.getTopicName());
-        kafkaTemplate.send(Topics.CREATE_PAYMENTS_TOPIC.getTopicName(),loanId);
+        log.info("Sending message to topic -> {}", Topics.CREATE_PAYMENTS_TOPIC.getTopicName());
+        kafkaTemplate.send(Topics.CREATE_PAYMENTS_TOPIC.getTopicName(), loanId);
     }
 }
