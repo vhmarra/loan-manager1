@@ -1,6 +1,6 @@
 package br.com.emprestimo.kafka.producer;
 
-import br.com.emprestimo.dtos.UserSignUpRequest;
+import br.com.emprestimo.dtos.LogRequestDto;
 import br.com.emprestimo.enums.Topics;
 import br.com.emprestimo.utils.ParserConfig;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class CreateUserKafkaSender {
+public class LogProducer {
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
@@ -21,13 +21,12 @@ public class CreateUserKafkaSender {
     private ParserConfig parser;
 
     @Autowired
-    public CreateUserKafkaSender(KafkaTemplate<String, String> kafkaTemplate) {
+    public LogProducer(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(UserSignUpRequest request) {
-        log.info("Sending message to topic -> {}", Topics.CREATE_USER_TOPIC.getTopicName());
-        var userRequestParsed = parser.getParser().toJson(request);
-        kafkaTemplate.send(Topics.CREATE_USER_TOPIC.getTopicName(), userRequestParsed);
+    public void sendLog(LogRequestDto log) {
+        var parsedMessage = parser.getParser().toJson(log);
+        kafkaTemplate.send(Topics.LOG_TOPIC.getTopicName(), parsedMessage);
     }
 }

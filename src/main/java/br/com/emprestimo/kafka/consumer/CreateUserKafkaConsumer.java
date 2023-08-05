@@ -17,9 +17,13 @@ public class CreateUserKafkaConsumer {
 
     @KafkaListener(topics = "create.user.topic", groupId = "group-id")
     void createUser(String request) {
-        var parsedUser = new Gson().fromJson(request, UserSignUpRequest.class);
-        log.info("Creating user -> cpf:{} name:{}", parsedUser.getCpf(), parsedUser.getName());
-        service.signUpUser(parsedUser);
+        try {
+            var parsedUser = new Gson().fromJson(request, UserSignUpRequest.class);
+            log.info("Creating user -> cpf:{} name:{}", parsedUser.getCpf(), parsedUser.getName());
+            service.signUpUser(parsedUser);
+        } catch (Exception e) {
+            log.error("Error while parse message");
+        }
     }
 
 }

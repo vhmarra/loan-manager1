@@ -9,6 +9,7 @@ import br.com.emprestimo.kafka.producer.CreatePaymentsKafkaSender;
 import br.com.emprestimo.repositories.LoanPaymentsRepository;
 import br.com.emprestimo.repositories.LoanRepository;
 import br.com.emprestimo.repositories.UserRepository;
+import br.com.emprestimo.utils.UserContextUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class LoanService {
+public class LoanService extends UserContextUtil {
 
     private static final Long THIRTY_YEARS_IN_DAYS = 10958L;
 
@@ -35,10 +36,10 @@ public class LoanService {
     public void requestLoan(LoanRequest request) {
         loanIsEligible(request.getLoanValue(), request.getLoanDateSigned(), request.getLoanDateDue());
         validateMaxLoanTime(request);
-        var user = userRepository.findUserByCpf(request.getUserCpf());
-        if (user.isPresent() && user.get().getIsUserActive()) {
+        var user = getUser();
+        if (user.getIsUserActive()) {
             var loan = new LoanEntity(request);
-            loan.setUser(user.get());
+            loan.setUser(user);
             log.info("Saving loan {}", loan.getLoanId());
             var loanSaved = repository.save(loan);
             log.info("Loan saved {}", loanSaved.getLoanId());

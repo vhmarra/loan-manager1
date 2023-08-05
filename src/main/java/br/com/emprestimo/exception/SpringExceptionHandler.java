@@ -35,4 +35,9 @@ public class SpringExceptionHandler extends ResponseEntityExceptionHandler {
     ResponseEntity<Object> UnsupportedOperationExceptionHandler(RuntimeException rte, WebRequest request) {
         return handleExceptionInternal(rte, rte.getMessage(), new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, request);
     }
+
+    @ExceptionHandler(value = SecurityException.class)
+    ResponseEntity<Object> SecurityExceptionHandler(Exception ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    }
 }

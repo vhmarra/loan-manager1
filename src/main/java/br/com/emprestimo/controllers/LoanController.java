@@ -16,7 +16,7 @@ public class LoanController {
     private final LoanService service;
 
     @PostMapping
-    public ResponseEntity<?> requestLoan(@RequestBody LoanRequest request) {
+    public ResponseEntity<?> requestLoan(@RequestBody LoanRequest request, @RequestHeader(name = "auth-token") String authCode) {
         service.requestLoan(request);
         return ResponseEntity.ok().build();
     }

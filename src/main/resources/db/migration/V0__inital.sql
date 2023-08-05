@@ -36,3 +36,23 @@ CREATE TABLE loan_payments_tb (
 	PRIMARY KEY (payment_id),
 	CONSTRAINT fk_loan FOREIGN KEY (loan_id) REFERENCES loan_tb(loan_id)
 );
+
+CREATE TABLE log_tb (
+	log_id uuid DEFAULT uuid_generate_v4 (),
+	message text NULL,
+	request text NULL,
+	response text NULL,
+	log_date date NULL,
+	PRIMARY KEY (log_id)
+);
+
+CREATE TABLE access_token (
+    id int8 PRIMARY KEY,
+    access_token_value varchar(255) NULL,
+    active bool NULL,
+    PRIMARY KEY (id)
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES user_tb(user_id)
+);
+
+CREATE INDEX token_idx
+ON access_token (access_token_value);
