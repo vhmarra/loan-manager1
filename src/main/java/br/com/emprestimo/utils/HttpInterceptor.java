@@ -12,8 +12,10 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.WebRequestHandlerInterceptorAdapter;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Objects;
 
 @Service
@@ -66,11 +68,16 @@ public class HttpInterceptor extends WebRequestHandlerInterceptorAdapter {
         return true;
     }
 
-    private void generateLog(HttpServletRequest request) {
-        var log = new LogRequestDto();
-        log.setMessage(request.toString());
-        log.setRequest(request.toString());
-        producer.sendLog(log);
+    private void generateLog(HttpServletRequest request) throws ServletException, IOException {
+        var logInfo = new LogRequestDto();
+        try {
+            logInfo.setMessage(request.getParts().toString());
+            logInfo.setRequest(request.getParts().toString());
+            producer.sendLog(logInfo);
+        } catch (ServletException | IOException exception) {
+            log.error("Error while send log -> message {} ", exception.toString());
+        }
+
     }
 
     @Override

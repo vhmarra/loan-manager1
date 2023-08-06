@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ParserConfig {
 
-
     @Bean
     public Gson getParser() {
         return new GsonBuilder()

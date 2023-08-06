@@ -80,12 +80,12 @@ public class UserService extends UserContextUtil {
         return new UserResponse();
     }
 
-    @Transactional(rollbackOn = SQLException.class)
+    @Transactional(rollbackOn = {SQLException.class, SecurityException.class})
     public String authenticate(final String email, final String pwd) {
         var user = userRepository.findUserByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if (!BCrypt.verifyer().verify(pwd.getBytes(), user.getPassword().getBytes()).verified) {
-            throw new RuntimeException("AUTH ERROR");
+            throw new SecurityException("AUTH ERROR");
         }
 
         var accessToken = new AccessToken();

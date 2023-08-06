@@ -10,15 +10,15 @@ public final class UserThreadConfig {
         super();
     }
 
-    public static void setToken(AccessToken token) {
-        tClocal.set(token);
-    }
-
     public static void removeToken() {
         tClocal.remove();
     }
 
     public static ThreadLocal<AccessToken> getToken() {
         return tClocal;
+    }
+
+    public static void setToken(AccessToken token) {
+        tClocal.set(token);
     }
 }
