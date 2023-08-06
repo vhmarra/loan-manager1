@@ -50,6 +50,8 @@ CREATE TABLE access_token (
     id int8 PRIMARY KEY,
     access_token_value varchar(255) NULL,
     active bool NULL,
+    dt_created date NULL,
+    dt_valid date NULL,
     PRIMARY KEY (id)
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES user_tb(user_id)
 );

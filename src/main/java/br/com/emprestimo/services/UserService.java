@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -89,10 +90,15 @@ public class UserService extends UserContextUtil {
         }
 
         var accessToken = new AccessToken();
+        var now = LocalDateTime.now();
+        var expiredAt = LocalDateTime.now().plusDays(1L);
         accessToken.setToken(UUID.randomUUID().toString());
         accessToken.setUser(user);
         accessToken.setIsActive(true);
+        accessToken.setDateCreated(now);
+        accessToken.setDateValid(expiredAt);
         user.setIsUserActive(true);
+
         accessTokenRepository.save(accessToken);
         userRepository.save(user);
         setAccessToken(accessToken);

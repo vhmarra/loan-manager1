@@ -3,6 +3,7 @@ package br.com.emprestimo.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "access_token")
@@ -19,6 +20,12 @@ public class AccessToken {
 
     @Column(name = "active")
     private Boolean isActive;
+
+    @Column(name = "dt_created")
+    private LocalDateTime dateCreated;
+
+    @Column(name = "dt_valid")
+    private LocalDateTime dateValid;
 
     @OneToOne
     UserEntity user;
