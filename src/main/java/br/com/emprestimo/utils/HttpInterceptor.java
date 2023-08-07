@@ -75,10 +75,10 @@ public class HttpInterceptor extends WebRequestHandlerInterceptorAdapter {
     private void generateLog(HttpServletRequest request) throws ServletException, IOException {
         var logInfo = new LogRequestDto();
         try {
-            logInfo.setMessage(request.getParts().toString());
-            logInfo.setRequest(request.getParts().toString());
+            logInfo.setMessage(request.getParameterMap().toString());
+            logInfo.setRequest(request.getParameterMap().toString());
             producer.sendLog(logInfo);
-        } catch (ServletException | IOException exception) {
+        } catch (Exception exception) {
             log.error("Error while send log -> message {} ", exception.toString());
         }
     }

@@ -35,7 +35,7 @@ public class UserService extends UserContextUtil {
     private final LoanRepository loanRepository;
     private final LoanPaymentsRepository loanPaymentsRepository;
     private final CreateUserKafkaSender createUserKafkaSender;
-    private final AccessTokenRepository accessTokenRepository;
+    private final AccessTokenService accessTokenService;
 
     @Transactional
     public void signUpUser(UserSignUpRequest request) {
@@ -89,21 +89,11 @@ public class UserService extends UserContextUtil {
             throw new SecurityException("AUTH ERROR");
         }
 
-        var accessToken = new AccessToken();
-        var now = LocalDateTime.now();
-        var expiredAt = LocalDateTime.now().plusDays(1L);
-        accessToken.setToken(UUID.randomUUID().toString());
-        accessToken.setUser(user);
-        accessToken.setIsActive(true);
-        accessToken.setDateCreated(now);
-        accessToken.setDateValid(expiredAt);
-        user.setIsUserActive(true);
-
-        accessTokenRepository.save(accessToken);
+        var token = accessTokenService.createToken(user);
         userRepository.save(user);
-        setAccessToken(accessToken);
+        setAccessToken(token);
 
-        return accessToken.getToken();
+        return token.getToken();
     }
 
     public void sendUserToQueue(UserSignUpRequest request) {
