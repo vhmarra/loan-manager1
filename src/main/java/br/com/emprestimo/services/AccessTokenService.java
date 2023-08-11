@@ -24,16 +24,22 @@ public class AccessTokenService {
 
     @Transactional(rollbackOn = Exception.class)
     public AccessToken createToken(UserEntity user) {
-        var accessToken = new AccessToken();
-        var now = LocalDateTime.now();
-        var expiredAt = LocalDateTime.now().plusDays(1L);
-        accessToken.setToken(UUID.randomUUID().toString());
-        accessToken.setUser(user);
-        accessToken.setIsActive(true);
-        accessToken.setDateCreated(now);
-        accessToken.setDateValid(expiredAt);
-        user.setIsUserActive(true);
-        repository.save(accessToken);
-        return accessToken;
+        var userToken = repository.findByUser(user).orElse(null);
+        if (null == userToken || this.validateToken(userToken)) {
+            if (null != userToken) {
+                repository.delete(userToken);
+            }
+            var accessToken = new AccessToken();
+            var now = LocalDateTime.now();
+            var expiredAt = LocalDateTime.now().plusDays(1L);
+            accessToken.setToken(UUID.randomUUID().toString());
+            accessToken.setUser(user);
+            accessToken.setIsActive(true);
+            accessToken.setDateCreated(now);
+            accessToken.setDateValid(expiredAt);
+            user.setIsUserActive(true);
+            repository.save(accessToken);
+            return accessToken;
+        } else return userToken;
     }
 }
