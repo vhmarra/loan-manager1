@@ -34,10 +34,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<UserResponse> getUserData(@RequestHeader(name = "user-cpf") String userCpf,
-                                                    @RequestHeader(name = "auth-token") String authCode) {
-        CpfValidation.validateCpf(userCpf);
-        return ResponseEntity.of(Optional.of(service.getUserData(userCpf)));
+    public ResponseEntity<UserResponse> getUserData(@RequestHeader(name = "auth-token") String authCode) {
+        return ResponseEntity.of(Optional.of(service.getUserData()));
     }
 
     @PostMapping(value = "/auth")

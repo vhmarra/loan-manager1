@@ -22,6 +22,7 @@ import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 import static br.com.emprestimo.utils.CpfValidation.validateCpf;
@@ -58,11 +59,11 @@ public class UserService extends UserContextUtil {
         }
     }
 
-    public UserResponse getUserData(String userCpf) {
-        var user = userRepository.findUserByCpf(userCpf);
-        if (user.isPresent()) {
-            var userResponse = new UserResponse(user.get());
-            var loans = loanRepository.findAllByUserId(user.get().getId());
+    public UserResponse getUserData() {
+        var user = getUser();
+        if (Objects.nonNull(user)) {
+            var userResponse = new UserResponse(user);
+            var loans = loanRepository.findAllByUserId(user.getId());
             var loansResponse = new ArrayList<LoanResponse>();
             var loanPaymentsResponse = new ArrayList<LoanPaymentResponse>();
             loans.forEach(loanEntity -> {
