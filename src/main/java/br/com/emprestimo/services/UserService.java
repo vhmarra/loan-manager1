@@ -1,29 +1,27 @@
 package br.com.emprestimo.services;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import br.com.emprestimo.domain.AccessToken;
 import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.dtos.LoanPaymentResponse;
 import br.com.emprestimo.dtos.LoanResponse;
 import br.com.emprestimo.dtos.UserResponse;
 import br.com.emprestimo.dtos.UserSignUpRequest;
+import br.com.emprestimo.enums.Topics;
 import br.com.emprestimo.exception.UserNotFoundException;
-import br.com.emprestimo.kafka.producer.CreateUserKafkaSender;
-import br.com.emprestimo.repositories.AccessTokenRepository;
+import br.com.emprestimo.kafka.producer.KafkaSender;
 import br.com.emprestimo.repositories.LoanPaymentsRepository;
 import br.com.emprestimo.repositories.LoanRepository;
 import br.com.emprestimo.repositories.UserRepository;
 import br.com.emprestimo.utils.UserContextUtil;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.UUID;
 
 import static br.com.emprestimo.utils.CpfValidation.validateCpf;
 
@@ -35,7 +33,7 @@ public class UserService extends UserContextUtil {
     private final UserRepository userRepository;
     private final LoanRepository loanRepository;
     private final LoanPaymentsRepository loanPaymentsRepository;
-    private final CreateUserKafkaSender createUserKafkaSender;
+    private final KafkaSender sender;
     private final AccessTokenService accessTokenService;
 
     @Transactional
@@ -98,6 +96,7 @@ public class UserService extends UserContextUtil {
     }
 
     public void sendUserToQueue(UserSignUpRequest request) {
-        createUserKafkaSender.sendMessage(request);
+        var parser = new Gson().toJson(request);
+        sender.sendMessage(parser, Topics.CREATE_USER_TOPIC.getTopicName());
     }
 }
