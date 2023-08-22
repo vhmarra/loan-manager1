@@ -21,7 +21,4 @@ public class LoanRequest {
     @JsonProperty(value = "loan-date-due")
     private String loanDateDue;
 
-    @JsonProperty(value = "loan-user-cpf")
-    private String userCpf;
-
 }

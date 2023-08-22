@@ -23,7 +23,7 @@ import java.util.UUID;
 public class LoanPaymentService {
     private final LoanPaymentsRepository loanPaymentsRepository;
     private final LoanRepository loanRepository;
-    private final Environment env;
+    private final InterestService interestService;
 
     public void payInstalment(UUID paymentId) {
         var payment = loanPaymentsRepository.findByPaymentIdAndIsPayed(paymentId, Boolean.FALSE).orElseThrow(
@@ -46,7 +46,7 @@ public class LoanPaymentService {
         var monthsToDue = (int) ChronoUnit.MONTHS.between(loan.getLoanDateSigned().withDayOfMonth(1), loan.getLoanDateDue().withDayOfMonth(1));
         var loanPayments = new ArrayList<LoanPaymentsEntity>();
         var monthlyValue = (loan.getLoanValue().toBigInteger().doubleValue() / monthsToDue) +
-                ((loan.getLoanValue().toBigInteger().doubleValue() / monthsToDue) * getInterestValue());
+                ((loan.getLoanValue().toBigInteger().doubleValue() / monthsToDue) * interestService.getInterestValue());
         for (int i = 0; i < monthsToDue; i++) {
             var loanPayment = new LoanPaymentsEntity();
             loanPayment.setLoan(loan);
@@ -57,9 +57,4 @@ public class LoanPaymentService {
         }
         return loanPayments;
     }
-
-    private Double getInterestValue() {
-        return Double.valueOf(Objects.requireNonNull(env.getProperty("loan.interest.value")));
-    }
-
 }

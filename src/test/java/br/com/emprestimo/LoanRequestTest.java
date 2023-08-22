@@ -59,7 +59,7 @@ class LoanRequestTest {
         request.setName(USER_TEST_NAME);
         request.setPassword(USER_TEST_PWD);
         var savedUser = saveUser(request, Boolean.FALSE);
-        var loanRequest = buildLoanRequest(BigDecimal.valueOf(3000L), TODAY, TODAY_PLUS_30, savedUser.getCpf());
+        var loanRequest = buildLoanRequest(BigDecimal.valueOf(3000L), TODAY, TODAY_PLUS_30);
 
         assertThrows(UnsupportedOperationException.class, () -> service.requestLoan(loanRequest));
     }
@@ -72,8 +72,8 @@ class LoanRequestTest {
         request.setName(USER_TEST_NAME);
         request.setPassword(USER_TEST_PWD);
         var savedUser = saveUser(request, Boolean.TRUE);
-        var loanRequestOne = buildLoanRequest(BigDecimal.valueOf(3000L), TODAY, TODAY_PLUS_30, savedUser.getCpf());
-        var loanRequestTwo = buildLoanRequest(BigDecimal.valueOf(3000L), TODAY, TODAY_PLUS_30, savedUser.getCpf());
+        var loanRequestOne = buildLoanRequest(BigDecimal.valueOf(3000L), TODAY, TODAY_PLUS_30);
+        var loanRequestTwo = buildLoanRequest(BigDecimal.valueOf(3000L), TODAY, TODAY_PLUS_30);
         repository.save(buildLoanEntity(loanRequestOne, savedUser));
 
         assertThrows(UserAlreadyHasUnpayLoansException.class, () -> service.requestLoan(loanRequestTwo));
@@ -87,7 +87,7 @@ class LoanRequestTest {
         request.setName(USER_TEST_NAME);
         request.setPassword(USER_TEST_PWD);
         var savedUser = saveUser(request, Boolean.TRUE);
-        var loanRequest = buildLoanRequest(BigDecimal.valueOf(3000L), TODAY, TODAY_PLUS_30.plusMonths(11L), savedUser.getCpf());
+        var loanRequest = buildLoanRequest(BigDecimal.valueOf(3000L), TODAY, TODAY_PLUS_30.plusMonths(11L));
         var savedLoan = repository.save(buildLoanEntity(loanRequest, savedUser));
         var loanPayments = loanPaymentService.createLoanPayments(savedLoan);
 
@@ -108,9 +108,8 @@ class LoanRequestTest {
         return userRepository.save(user1);
     }
 
-    private LoanRequest buildLoanRequest(BigDecimal loanValue, LocalDate loanDateSigned, LocalDate loanDateDue,
-                                         String userCpf) {
-        return new LoanRequest(loanValue, loanDateSigned.toString(), loanDateDue.toString(), userCpf);
+    private LoanRequest buildLoanRequest(BigDecimal loanValue, LocalDate loanDateSigned, LocalDate loanDateDue) {
+        return new LoanRequest(loanValue, loanDateSigned.toString(), loanDateDue.toString());
     }
 
     private LoanEntity buildLoanEntity(LoanRequest request, UserEntity user) {
