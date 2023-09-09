@@ -67,6 +67,12 @@ public class HttpInterceptor extends WebRequestHandlerInterceptorAdapter {
                 throw new SecurityException("Forbidden");
             }
             UserThreadConfig.setToken(token);
+        } else if (request.getServletPath().contains("api/v1/loan-payment") && Objects.equals(request.getMethod(), "PATCH")) {
+            var token = repository.findByToken(request.getHeader("auth-token")).orElse(null);
+            if (null == token || accessTokenService.validateToken(token)) {
+                throw new SecurityException("Forbidden");
+            }
+            UserThreadConfig.setToken(token);
         }
 
         return true;

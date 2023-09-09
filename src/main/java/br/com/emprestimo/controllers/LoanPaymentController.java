@@ -18,7 +18,7 @@ public class LoanPaymentController {
     private final LoanPaymentService service;
 
     @PatchMapping(value = "pay-instalment")
-    public ResponseEntity<?> payInstalment(@RequestHeader(value = "loan-payment-id") UUID loanId) {
+    public ResponseEntity<?> payInstalment(@RequestHeader(value = "loan-payment-id") UUID loanId, @RequestHeader(name = "auth-token") String authCode) {
         service.payInstalment(loanId);
         return ResponseEntity.ok().build();
     }

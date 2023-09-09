@@ -29,7 +29,6 @@ public class LoanService extends UserContextUtil {
 
     private final LoanRepository repository;
     private final LoanPaymentsRepository loanPaymentsRepository;
-    private final UserRepository userRepository;
     private final CreatePaymentsKafkaSender kafkaSender;
 
     @Transactional
