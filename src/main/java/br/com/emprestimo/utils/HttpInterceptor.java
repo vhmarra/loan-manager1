@@ -1,7 +1,5 @@
 package br.com.emprestimo.utils;
 
-import br.com.emprestimo.dtos.LogRequestDto;
-import br.com.emprestimo.kafka.producer.LogProducer;
 import br.com.emprestimo.repositories.AccessTokenRepository;
 import br.com.emprestimo.services.AccessTokenService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +11,10 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.WebRequestHandlerInterceptorAdapter;
 
-import javax.servlet.ServletException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
 import java.util.Objects;
 
 @Service
