@@ -6,6 +6,7 @@ import br.com.emprestimo.enums.Topics;
 import br.com.emprestimo.exception.InvalidLoanTimeFrameException;
 import br.com.emprestimo.exception.PaymentNotFoundException;
 import br.com.emprestimo.exception.UserAlreadyHasUnpayLoansException;
+import br.com.emprestimo.exception.UserNotFoundException;
 import br.com.emprestimo.kafka.producer.KafkaSender;
 import br.com.emprestimo.repositories.LoanPaymentsRepository;
 import br.com.emprestimo.repositories.LoanRepository;
@@ -18,6 +19,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -50,8 +52,15 @@ public class LoanService extends UserContextUtil {
 
     @Transactional
     public void updateLoanStatus(UUID loanId, String loanStatus) {
+        var user = getUser();
+
         var loan = repository.findById(loanId).orElseThrow(() -> new PaymentNotFoundException("Loan not found"));
-        if (Boolean.TRUE.equals(loan.getUser().getIsUserActive())) {
+
+        if (!Objects.equals(loan.getUser().getId(), user.getId())) {
+            throw new UserNotFoundException("you cannot update anothers user loan");
+        }
+
+        if (Boolean.TRUE.equals(user.getIsUserActive())) {
             loan.setIsApproved(Boolean.valueOf(loanStatus));
             repository.save(loan);
         } else {

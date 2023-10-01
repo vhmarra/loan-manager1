@@ -22,7 +22,9 @@ public class LoanController {
     }
 
     @PatchMapping(value = "update")
-    public ResponseEntity<?> updateLoanStatus(@RequestHeader(value = "loan-id") UUID loanId, String loanStatus) {
+    public ResponseEntity<?> updateLoanStatus(@RequestHeader(value = "loan-id") UUID loanId,
+                                              @RequestHeader(value = "status") String loanStatus,
+                                              @RequestHeader(value = "auth-token") String authCode) {
         service.updateLoanStatus(loanId, loanStatus);
         return ResponseEntity.ok().build();
     }
