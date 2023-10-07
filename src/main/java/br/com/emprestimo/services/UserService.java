@@ -12,6 +12,7 @@ import br.com.emprestimo.kafka.producer.KafkaSender;
 import br.com.emprestimo.repositories.LoanPaymentsRepository;
 import br.com.emprestimo.repositories.LoanRepository;
 import br.com.emprestimo.repositories.UserRepository;
+import br.com.emprestimo.utils.PasswordValidation;
 import br.com.emprestimo.utils.UserContextUtil;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static br.com.emprestimo.utils.CpfValidation.validateCpf;
+import static br.com.emprestimo.utils.PasswordValidation.ValidatePassword;
 
 @Service
 @Slf4j
@@ -84,9 +86,7 @@ public class UserService extends UserContextUtil {
     public String authenticate(final String email, final String pwd) {
         var user = userRepository.findUserByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        if (!BCrypt.verifyer().verify(pwd.getBytes(), user.getPassword().getBytes()).verified) {
-            throw new SecurityException("AUTH ERROR");
-        }
+        ValidatePassword(user, pwd);
 
         var token = accessTokenService.createToken(user);
         userRepository.save(user);
