@@ -9,8 +9,10 @@ import java.util.UUID;
 
 @Data
 public class LoanPaymentResponse {
+    
     @JsonProperty(value = "loan-payment-id")
     private UUID paymentId;
+
     @JsonProperty(value = "payment-value")
     private Double loanValue;
 
