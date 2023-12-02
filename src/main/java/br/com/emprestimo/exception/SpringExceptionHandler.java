@@ -40,4 +40,9 @@ public class SpringExceptionHandler extends ResponseEntityExceptionHandler {
     ResponseEntity<Object> SecurityExceptionHandler(Exception ex, WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
+
+    @ExceptionHandler(value = AlreadyPayException.class)
+    ResponseEntity<Object> AlreadyPayedExceptionHandler(Exception ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.I_AM_A_TEAPOT, request);
+    }
 }
