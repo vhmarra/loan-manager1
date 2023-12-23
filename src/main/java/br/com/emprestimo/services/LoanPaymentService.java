@@ -38,6 +38,7 @@ public class LoanPaymentService extends UserContextUtil {
         var loan = loanRepository.findById(UUID.fromString(loanId)).orElseThrow(() -> new PaymentNotFoundException("Loan not found"));
         var loanPayments = createLoanPayments(loan);
         loanPaymentsRepository.saveAll(loanPayments);
+        loanPayments.forEach(it -> log.info("Loan payment with id -> {} created..", it.getPaymentId()));
         log.info("All {} loan payments from loan -> {} is saved", loanPayments.size(), loanId);
     }
 
