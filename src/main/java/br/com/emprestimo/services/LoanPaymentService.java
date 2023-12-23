@@ -19,6 +19,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Slf4j
 public class LoanPaymentService extends UserContextUtil {
+
     private final LoanPaymentsRepository loanPaymentsRepository;
     private final LoanRepository loanRepository;
     private final InterestService interestService;
@@ -56,7 +57,7 @@ public class LoanPaymentService extends UserContextUtil {
             loan.setIsPayed(false);
             loanPayments.add(loanPayment);
         }
-        Collections.reverse(loanPayments);
+
         return loanPayments;
     }
 
