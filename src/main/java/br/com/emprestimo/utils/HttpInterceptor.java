@@ -48,7 +48,11 @@ public class HttpInterceptor extends WebRequestHandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        validateEndpoints(request);
+        return true;
+    }
 
+    private void validateEndpoints(HttpServletRequest request) {
         if (request.getServletPath().contains("api/v1/user") && Objects.equals(request.getMethod(), "GET")) {
             var token = repository.findByToken(request.getHeader("auth-token")).orElse(null);
             if (null == token || accessTokenService.validateToken(token)) {
@@ -68,8 +72,6 @@ public class HttpInterceptor extends WebRequestHandlerInterceptorAdapter {
             }
             UserThreadConfig.setToken(token);
         }
-
-        return true;
     }
 
 
