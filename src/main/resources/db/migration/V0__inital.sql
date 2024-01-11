@@ -56,5 +56,34 @@ CREATE TABLE access_token (
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES user_tb(user_id)
 );
 
+CREATE TABLE user_financial_account_tb (
+    account_id uuid DEFAULT uuid_generate_v4 (),
+    available_funds float8 NULL,
+    blocked_funds float8 NULL,
+    active bool NULL,
+    account_status varchar(50),
+    dt_created date,
+    dt_updated date,
+    PRIMARY KEY (account_id)
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES user_tb(user_id)
+);
+
+CREATE TABLE transaction_tb (
+    transaction_id uuid DEFAULT uuid_generate_v4 (),
+    dt_created date,
+    dt_completed date,
+    transaction_status varchar(50) NULL,
+    transaction_value float8 NULL,
+    user_in int8 NULL,
+    user_out int8 NULL,
+    PRIMARY KEY (transaction_id)
+);
+
 CREATE INDEX token_idx
 ON access_token (access_token_value);
+
+CREATE INDEX user_in_idx
+ON transaction_tb(user_in);
+
+CREATE INDEX user_out_idx
+ON transaction_tb(user_out);

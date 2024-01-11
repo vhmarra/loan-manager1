@@ -28,6 +28,6 @@ public class AccessToken {
     private LocalDateTime dateValid;
 
     @OneToOne
-    UserEntity user;
+    private UserEntity user;
 
 }
