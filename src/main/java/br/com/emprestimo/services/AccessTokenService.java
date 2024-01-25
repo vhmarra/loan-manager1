@@ -39,6 +39,7 @@ public class AccessTokenService {
             accessToken.setDateValid(expiredAt);
             user.setIsUserActive(true);
             repository.save(accessToken);
+            log.info("Acess token -> {}", accessToken);
             return accessToken;
         } else return userToken;
     }

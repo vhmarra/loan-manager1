@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
 @Service
-@Slf4j
 public class HttpInterceptor extends WebRequestHandlerInterceptorAdapter {
 
     private final WebRequestInterceptor requestInterceptor;
@@ -72,6 +71,18 @@ public class HttpInterceptor extends WebRequestHandlerInterceptorAdapter {
             }
             UserThreadConfig.setToken(token);
         } else if (request.getServletPath().contains("api/v1/user/financial-account") && Objects.equals(request.getMethod(), "POST")) {
+            var token = repository.findByToken(request.getHeader("auth-token")).orElse(null);
+            if (null == token || accessTokenService.validateToken(token)) {
+                throw new SecurityException("Forbidden");
+            }
+            UserThreadConfig.setToken(token);
+        } else if (request.getServletPath().contains("api/v1/user/account/add-funds") && Objects.equals(request.getMethod(), "POST")) {
+            var token = repository.findByToken(request.getHeader("auth-token")).orElse(null);
+            if (null == token || accessTokenService.validateToken(token)) {
+                throw new SecurityException("Forbidden");
+            }
+            UserThreadConfig.setToken(token);
+        } else if (request.getServletPath().contains("api/v1/transactions/create") && Objects.equals(request.getMethod(), "POST")) {
             var token = repository.findByToken(request.getHeader("auth-token")).orElse(null);
             if (null == token || accessTokenService.validateToken(token)) {
                 throw new SecurityException("Forbidden");

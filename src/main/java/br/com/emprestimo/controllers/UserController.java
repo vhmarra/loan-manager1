@@ -1,5 +1,6 @@
 package br.com.emprestimo.controllers;
 
+import br.com.emprestimo.dtos.AddFundToAccountRequest;
 import br.com.emprestimo.dtos.CreateAccountResponse;
 import br.com.emprestimo.dtos.UserResponse;
 import br.com.emprestimo.dtos.UserSignUpRequest;
@@ -42,13 +43,19 @@ public class UserController {
     }
 
     @PostMapping(value = "/auth")
-    public ResponseEntity<?> authUser(@RequestHeader(name = "email") String email, @RequestHeader(name = "pwd") String pwd) {
-        return ResponseEntity.ok(service.authenticate(email, pwd));
+    public ResponseEntity<?> authUser(@RequestHeader(name = "credential") String credential, @RequestHeader(name = "pwd") String pwd) {
+        return ResponseEntity.ok(service.authenticate(credential, pwd));
     }
 
     @PostMapping(value = "/financial-account")
     public ResponseEntity<CreateAccountResponse> createFinancialAccount(@RequestHeader(name = "auth-token") String authCode) {
         var response = accountService.createAccount();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping(value = "account/add-funds")
+    public ResponseEntity<?> addFundsToAccount(@RequestHeader(name = "auth-token") String authCode, @RequestBody AddFundToAccountRequest request) {
+        accountService.addFundToAccount(request);
+        return ResponseEntity.ok().build();
     }
 }

@@ -27,7 +27,7 @@ public class TransactionEntity {
 
     @Column(name = "transaction_status")
     @Enumerated(EnumType.STRING)
-    private TransactionStatus accountStatus;
+    private TransactionStatus transactionStatus;
 
     @Column(name = "transaction_value")
     private Double transactionValue;

@@ -1,5 +1,6 @@
 package br.com.emprestimo.services;
 
+import br.com.emprestimo.domain.UserEntity;
 import br.com.emprestimo.domain.UserFinancialAccountEntity;
 import br.com.emprestimo.dtos.AddFundToAccountRequest;
 import br.com.emprestimo.dtos.CreateAccountResponse;
@@ -75,6 +76,10 @@ public class UserFinancialAccountService extends UserContextUtil {
         account.setAccountStatus(status);
         log.info("Change status to -> {} for account with id -> {}", status, account.getAccountId());
         repository.save(account);
+    }
+
+    public UserFinancialAccountEntity getAccountByUser(UserEntity user) {
+        return repository.findByUserId(user.getId());
     }
 
 }

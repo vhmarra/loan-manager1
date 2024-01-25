@@ -13,7 +13,7 @@ CREATE TABLE user_tb (
 );
 
 CREATE TABLE loan_tb (
-	loan_id uuid DEFAULT uuid_generate_v4 (),
+	loan_id uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
 	approved bool NULL,
 	is_payed bool NULL,
 	loan_date_due date NULL,
@@ -27,7 +27,7 @@ CREATE TABLE loan_tb (
 );
 
 CREATE TABLE loan_payments_tb (
-	payment_id uuid DEFAULT uuid_generate_v4 (),
+	payment_id uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
 	is_payed bool NULL,
 	loan_date_payed date NULL,
 	loan_payment_supposed_day date NULL,
@@ -38,7 +38,7 @@ CREATE TABLE loan_payments_tb (
 );
 
 CREATE TABLE log_tb (
-	log_id uuid DEFAULT uuid_generate_v4 (),
+	log_id uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
 	message text NULL,
 	request text NULL,
 	response text NULL,
@@ -47,7 +47,7 @@ CREATE TABLE log_tb (
 );
 
 CREATE TABLE access_token (
-    id int8 PRIMARY KEY,
+    id int8 PRIMARY KEY PRIMARY KEY,
     access_token_value varchar(255) NULL,
     active bool NULL,
     dt_created date NULL,
@@ -57,7 +57,7 @@ CREATE TABLE access_token (
 );
 
 CREATE TABLE user_financial_account_tb (
-    account_id uuid DEFAULT uuid_generate_v4 (),
+    account_id uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
     available_funds float8 NULL,
     blocked_funds float8 NULL,
     active bool NULL,
@@ -69,7 +69,7 @@ CREATE TABLE user_financial_account_tb (
 );
 
 CREATE TABLE transaction_tb (
-    transaction_id uuid DEFAULT uuid_generate_v4 (),
+    transaction_id PRIMARY KEY uuid DEFAULT uuid_generate_v4 (),
     dt_created date,
     dt_completed date,
     transaction_status varchar(50) NULL,
