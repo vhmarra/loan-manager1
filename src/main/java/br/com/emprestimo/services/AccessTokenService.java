@@ -18,9 +18,6 @@ public class AccessTokenService {
 
     private final AccessTokenRepository repository;
 
-    public boolean validateToken(AccessToken token) {
-        return LocalDateTime.now().isAfter(token.getDateValid());
-    }
 
     @Transactional(rollbackOn = Exception.class)
     public AccessToken createToken(UserEntity user) {
@@ -29,17 +26,30 @@ public class AccessTokenService {
             if (null != userToken) {
                 repository.delete(userToken);
             }
-            var accessToken = new AccessToken();
-            var now = LocalDateTime.now();
-            var expiredAt = LocalDateTime.now().plusDays(1L);
-            accessToken.setToken(UUID.randomUUID().toString());
-            accessToken.setUser(user);
-            accessToken.setIsActive(true);
-            accessToken.setDateCreated(now);
-            accessToken.setDateValid(expiredAt);
-            user.setIsUserActive(true);
+            var accessToken = generateToken(user);
             repository.save(accessToken);
             return accessToken;
         } else return userToken;
+    }
+
+    private AccessToken generateToken(UserEntity user) {
+        var accessToken = new AccessToken();
+        var now = LocalDateTime.now();
+        var expiredAt = LocalDateTime.now().plusDays(1L);
+        var tokenUuid = UUID.randomUUID().toString();
+        accessToken.setToken(tokenUuid);
+        accessToken.setUser(user);
+        accessToken.setIsActive(true);
+        accessToken.setDateCreated(now);
+        accessToken.setDateValid(expiredAt);
+        user.setIsUserActive(true);
+
+        //TODO remove later dont log tokens
+        log.info("Token for user with id -> {} created with value -> {}", user.getId(), tokenUuid);
+        return accessToken;
+    }
+
+    public boolean validateToken(AccessToken token) {
+        return LocalDateTime.now().isAfter(token.getDateValid());
     }
 }
