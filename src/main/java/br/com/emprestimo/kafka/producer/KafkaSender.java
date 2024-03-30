@@ -23,4 +23,9 @@ public class KafkaSender {
         log.info("Sending message -> {} to topic -> {}", message, topic);
         kafkaTemplate.send(topic, message);
     }
+
+    public void sendToDLQ(String message, String dlqTopic) {
+        log.info("Sending message -> {} to dlq topic -> {}", message, dlqTopic);
+        this.sendMessage(message, dlqTopic);
+    }
 }

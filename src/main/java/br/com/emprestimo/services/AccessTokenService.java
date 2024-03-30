@@ -28,6 +28,7 @@ public class AccessTokenService {
             }
             var accessToken = generateToken(user);
             repository.save(accessToken);
+            log.info("Acess token -> {}", accessToken);
             return accessToken;
         } else return userToken;
     }

@@ -2,6 +2,7 @@ package br.com.emprestimo.services;
 
 import br.com.emprestimo.domain.LoanEntity;
 import br.com.emprestimo.domain.LoanPaymentsEntity;
+import br.com.emprestimo.dtos.AddFundToAccountRequest;
 import br.com.emprestimo.dtos.LoanRequest;
 import br.com.emprestimo.enums.Topics;
 import br.com.emprestimo.exception.*;
@@ -30,6 +31,7 @@ public class LoanService extends UserContextUtil {
 
     private final LoanRepository repository;
     private final LoanPaymentsRepository loanPaymentsRepository;
+    private final UserFinancialAccountService accountService;
     private final KafkaSender sender;
 
     @Transactional
@@ -52,15 +54,16 @@ public class LoanService extends UserContextUtil {
     @Transactional
     public void updateLoanStatus(UUID loanId, String loanStatus) {
         var user = getUser();
-
         var loan = repository.findById(loanId).orElseThrow(() -> new PaymentNotFoundException("Loan not found"));
+        var account = accountService.getAccountByUser(user);
 
         if (!Objects.equals(loan.getUser().getId(), user.getId())) {
             throw new UserNotFoundException("you cannot update anothers user loan");
         }
 
-        if (Boolean.TRUE.equals(user.getIsUserActive())) {
+        if (Boolean.TRUE.equals(user.getIsUserActive()) && account.getIsActive()) {
             loan.setIsApproved(Boolean.valueOf(loanStatus));
+            accountService.addFundToAccount(new AddFundToAccountRequest(loan.getLoanValue().doubleValue()));
             repository.save(loan);
         } else {
             throw new UnsupportedOperationException("loan not found or user is not activated");

@@ -83,8 +83,8 @@ public class UserService extends UserContextUtil {
     }
 
     @Transactional(rollbackOn = {SQLException.class, SecurityException.class})
-    public String authenticate(final String email, final String pwd) {
-        var user = userRepository.findUserByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
+    public String authenticate(final String credential, final String pwd) {
+        var user = userRepository.findUserByEmailOrCpf(credential).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         ValidatePassword(user, pwd);
 

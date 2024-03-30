@@ -21,4 +21,5 @@ public final class UserThreadConfig {
     public static void setToken(AccessToken token) {
         tClocal.set(token);
     }
+
 }
