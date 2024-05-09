@@ -88,11 +88,12 @@ public class TransactionalService extends UserContextUtil {
 
     private Boolean validateUserForTransaction(UserEntity user) {
         var userAccount = userFinancialAccountService.getAccountByUser(user);
-        if (Objects.isNull(userAccount)) {
-            return false;
-        }
-
-        return user.getIsUserActive() && userAccount.getIsActive() && userAccount.getAccountStatus().equals(AccountStatus.OPEN);
+        return !Objects.isNull(userAccount) &&
+                user.getIsUserActive()
+                &&
+                userAccount.getIsActive()
+                &&
+                userAccount.getAccountStatus().equals(AccountStatus.OPEN);
     }
 
 

@@ -2,7 +2,6 @@ package br.com.emprestimo.utils;
 
 import br.com.emprestimo.repositories.AccessTokenRepository;
 import br.com.emprestimo.services.AccessTokenService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequestInterceptor;
@@ -10,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.WebRequestHandlerInterceptorAdapter;
+import springfox.documentation.swagger2.mappers.ModelMapper;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +25,7 @@ public class HttpInterceptor extends WebRequestHandlerInterceptorAdapter {
     private final AccessTokenRepository repository;
 
     private final AccessTokenService accessTokenService;
+
 
     public HttpInterceptor(WebRequestInterceptor requestInterceptor, AccessTokenRepository repository, AccessTokenService accessTokenService) {
         super(requestInterceptor);
@@ -93,11 +94,9 @@ public class HttpInterceptor extends WebRequestHandlerInterceptorAdapter {
 
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-    }
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {}
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-    }
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {}
 
 }
